@@ -6,15 +6,10 @@
 #define CSV_FILE "ETF_data.csv"
 
 
-struct ETF {
-	std::string name;
-	std
-};
-
 void read_csv()
 {
     //Open ETF_data.csv and store file in "ip"
-    ifstream ip("ETF_data.csv");
+	std::ifstream ip(CSV_FILE);
     
     //If file fails to open, throw error
     if (!ip.is_open()) exit(EXIT_FAILURE);
@@ -22,28 +17,28 @@ void read_csv()
     //This is very poorly written right now
     //ETF tracks the name, single_price tracks the prices for a single ETF
     //Afterward, the ETF and single_price vector are stored in ETF_list and prices, respectively
-	std::vector<string> ETF_list;
-	std::string current_ETF;
-	std::vector<vector<float> > prices;
+	std::vector<std::string> ETF_list;
+	std::string ETF;
+	std::vector<std::vector<float> > prices;
 	std::vector<float> single_price;
 
     //Parse through the excel document row by row
     //getline(ip, line) exists here to skip the first row
-    string line;
-    getline(ip, line);
+	std::string line;
+	std::getline(ip, line);
 
     //Keeps track of the index to print
     int index = 0;
 
     //While data still exists, parse through each row
-    while (getline(ip, line)) {
+    while (std::getline(ip, line)) {
         //Tokenizes a single row into each data cell
-        istringstream ss(line);
-        string token;
+		std::istringstream ss(line);
+		std::string token;
 
         //Get the first entry in the row, which is the name of the ETF
         //Store the value in ETF
-        getline(ss, ETF, ',');
+		std::getline(ss, ETF, ',');
         ETF_list.push_back(ETF);
 
         //Get the rest of the data in the row, which contains the stock prices
@@ -54,7 +49,7 @@ void read_csv()
         //Store single_price in prices
         prices.push_back(single_price);
 
-		std::cout << "ETF: " << ETF_list[0] << '\n';
+		std::cout << "ETF: " << ETF_list[index] << '\n';
 		std::cout << "First Price: " << prices[index][0] << '\n';
 
         single_price.clear();
