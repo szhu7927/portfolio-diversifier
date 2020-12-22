@@ -18,7 +18,7 @@ void read_csv()
     //Afterward, the ETF and single_price vector are stored in ETF_list and prices, respectively
     vector<string> ETF_list;
     string ETF;
-    vector<vector<float>> prices;
+    vector<vector<float> > prices;
     vector<float> single_price;
 
     //Parse through the excel document row by row
