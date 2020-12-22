@@ -3,7 +3,13 @@
 #include <sstream>
 #include <vector>
 
-using namespace std;
+#define CSV_FILE "ETF_data.csv"
+
+
+struct ETF {
+	std::string name;
+	std
+};
 
 void read_csv()
 {
@@ -16,10 +22,10 @@ void read_csv()
     //This is very poorly written right now
     //ETF tracks the name, single_price tracks the prices for a single ETF
     //Afterward, the ETF and single_price vector are stored in ETF_list and prices, respectively
-    vector<string> ETF_list;
-    string ETF;
-    vector<vector<float> > prices;
-    vector<float> single_price;
+	std::vector<string> ETF_list;
+	std::string current_ETF;
+	std::vector<vector<float> > prices;
+	std::vector<float> single_price;
 
     //Parse through the excel document row by row
     //getline(ip, line) exists here to skip the first row
@@ -48,8 +54,8 @@ void read_csv()
         //Store single_price in prices
         prices.push_back(single_price);
 
-        cout << "ETF: " << ETF_list[0] << '\n';
-        cout << "First Price: " << prices[index][0] << '\n';
+		std::cout << "ETF: " << ETF_list[0] << '\n';
+		std::cout << "First Price: " << prices[index][0] << '\n';
 
         single_price.clear();
         index++;
