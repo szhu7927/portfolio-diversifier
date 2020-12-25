@@ -2,9 +2,9 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include "./lib/xframe/include/xframe/xio.hpp"
 
 #define CSV_FILE "ETF_data.csv"
-
 
 void read_csv()
 {
