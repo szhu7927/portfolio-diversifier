@@ -1,0 +1,22 @@
+############################################################################
+# Copyright (c) Johan Mabille and Sylvain Corlay                           #
+# Copyright (c) QuantStack                                                 #
+#                                                                          #
+# Distributed under the terms of the BSD 3-Clause License.                 #
+#                                                                          #
+# The full license is in the file LICENSE, distributed with this software. #
+############################################################################
+
+# xframe cmake module
+# This module sets the following variables in your project:
+#
+#   xframe_FOUND - true if xframe found on the system
+#   xframe_INCLUDE_DIRS - the directory containing xframe headers
+#   xframe_LIBRARY - empty
+
+@PACKAGE_INIT@
+
+set(PN xframe)
+set_and_check(${PN}_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+set(${PN}_LIBRARY "")
+check_required_components(${PN})

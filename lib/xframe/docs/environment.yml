@@ -1,0 +1,7 @@
+name: xframe-docs
+
+channels:
+  - QuantStack
+
+dependencies:
+  - breathe
