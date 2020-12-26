@@ -839,6 +839,13 @@ namespace xf
     {
         return xaxis<XFRAME_STRING_LABEL, T>(init.begin(), init.end());
     }
+
+    //CUSTOM TEMPLATE
+    template <class T, class L>
+    inline xaxis<L, T> axis(std::vector<std::string> init) noexcept
+    {
+        return xaxis<L, T>(init);
+    }
 }
 
 #endif
