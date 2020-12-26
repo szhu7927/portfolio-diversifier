@@ -86,6 +86,18 @@ hash_map_collection read_csv(std::string csv_file)
     return h;
 }
 
+float date_get_price(std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> datemap, std::string name, std::string date)
+{
+    std::pair<std::string, std::string> p(name, date);
+    return datemap[p];
+}
+
+float index_get_price(std::unordered_map<std::pair<std::string, int>, float, hash_pair> indexmap, std::string name, int index)
+{
+    std::pair<std::string, int> p(name, index);
+    return indexmap[p];
+}
+
 int main()
 {
     hash_map_collection data = read_csv("ETF_data.csv");
@@ -96,11 +108,9 @@ int main()
     std::string date = "2017-12-21";
     int index = 3;
 
-    std::pair<std::string, std::string> ex1(ETF, date);
-    std::cout << "ETF: " << ETF << "\n" << "Date: " << date << "\n" << "Price: " << data.datemap[ex1] << "\n";
+    std::cout << "ETF: " << ETF << "\n" << "Date: " << date << "\n" << "Price: " << date_get_price(datemap, ETF, date) << "\n";
 
     std::cout << "\n";
 
-    std::pair<std::string, int> ex2(ETF, index);
-    std::cout << "ETF: " << ETF << "\n" << "Index: " << index << "\n" << "Price: " << data.indexmap[ex2] << "\n";
+    std::cout << "ETF: " << ETF << "\n" << "Index: " << index << "\n" << "Price: " << index_get_price(indexmap, ETF, index) << "\n";
 }
