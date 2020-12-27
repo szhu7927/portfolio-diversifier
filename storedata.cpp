@@ -15,8 +15,8 @@ struct hash_pair {
 };
 
 struct hash_map_collection {
-    std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> datemap;
-    std::unordered_map<std::pair<std::string, int>, float, hash_pair> indexmap;
+    std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> date_map;
+    std::unordered_map<std::string, std::vector<float>> index_arr_map;
 };
 
 hash_map_collection read_csv(std::string csv_file)
@@ -28,11 +28,13 @@ hash_map_collection read_csv(std::string csv_file)
     if (!ip.is_open()) exit(EXIT_FAILURE);
 
     //Hashmap
-    std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> datemap;
-    std::unordered_map<std::pair<std::string, int>, float, hash_pair> indexmap;
+    std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> date_map;
+    std::unordered_map<std::string, std::vector<float>> index_arr_map;
     
     //Stores the first row in csv in dates
     std::vector<std::string> dates;
+    std::string ETF;
+    std::vector<float> prices;
 
     //Parse through the excel document row by row
     //Get first line for dates
@@ -50,8 +52,6 @@ hash_map_collection read_csv(std::string csv_file)
 
     //While data still exists, parse through each row
     while (std::getline(ip, line)) {
-        std::string ETF;
-        float price;
         int col = 0;
 
         //Tokenizes a single row into each data cell
@@ -65,13 +65,15 @@ hash_map_collection read_csv(std::string csv_file)
         //Get the rest of the data in the row, which contains the stock prices
         while (getline(ss, token, ',')) {
             std::pair<std::string, std::string> pdate(ETF, dates[col]);
-            datemap[pdate] = (float)atof(token.c_str());
+            date_map[pdate] = (float)atof(token.c_str());
 
-            std::pair<std::string, int> pindex(ETF, col);
-            indexmap[pindex] = (float)atof(token.c_str());
+            prices.push_back((float)atof(token.c_str()));
 
             col++;
         }
+
+        index_arr_map[ETF] = prices;
+        prices.clear();
 
         col = 0;
     }
@@ -80,37 +82,38 @@ hash_map_collection read_csv(std::string csv_file)
     ip.close();
 
     hash_map_collection h;
-    h.datemap = datemap;
-    h.indexmap = indexmap;
+    h.date_map = date_map;
+    h.index_arr_map = index_arr_map;
 
     return h;
 }
 
-float date_get_price(std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> datemap, std::string name, std::string date)
+float get_price(std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> date_map, std::string name, std::string date)
 {
     std::pair<std::string, std::string> p(name, date);
-    return datemap[p];
-}
-
-float index_get_price(std::unordered_map<std::pair<std::string, int>, float, hash_pair> indexmap, std::string name, int index)
-{
-    std::pair<std::string, int> p(name, index);
-    return indexmap[p];
+    return date_map[p];
 }
 
 int main()
 {
     hash_map_collection data = read_csv("ETF_data.csv");
-    std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> datemap = data.datemap;
-    std::unordered_map<std::pair<std::string, int>, float, hash_pair> indexmap = data.indexmap;
+    
+    //date_map is a hash map that takes in 2 key values (ETF name and date) and returns 1 value (price)
+    //We can use the get_price function to get any price given a name and date
+    std::unordered_map<std::pair<std::string, std::string>, float, hash_pair> date_map = data.date_map;
+
+    //index_arr_map is a hash map that takes in 1 key value (ETF name) and returns 1 value (vector of prices)
+    std::unordered_map<std::string, std::vector<float>> index_arr_map = data.index_arr_map;
 
     std::string ETF = "VTV";
     std::string date = "2017-12-21";
     int index = 3;
 
-    std::cout << "ETF: " << ETF << "\n" << "Date: " << date << "\n" << "Price: " << date_get_price(datemap, ETF, date) << "\n";
+    std::vector<float> ETF_arr = index_arr_map[ETF];
+
+    std::cout << "ETF: " << ETF << "\n" << "Date: " << date << "\n" << "Price: " << get_price(date_map, ETF, date) << "\n";
 
     std::cout << "\n";
 
-    std::cout << "ETF: " << ETF << "\n" << "Index: " << index << "\n" << "Price: " << index_get_price(indexmap, ETF, index) << "\n";
+    std::cout << "ETF: " << ETF << "\n" << "Index: " << index << "\n" << "Price: " << ETF_arr[index] << "\n";
 }
