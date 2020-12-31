@@ -3,6 +3,8 @@
 #include <sstream>
 #include <vector>
 
+#include "ymath.cpp"
+
 #define CSV_FILE "ETF_data.csv"
 
 
@@ -49,8 +51,8 @@ void read_csv()
         //Store single_price in prices
         prices.push_back(single_price);
 
-		std::cout << "ETF: " << ETF_list[index] << '\n';
-		std::cout << "First Price: " << prices[index][0] << '\n';
+		//std::cout << "ETF: " << ETF_list[index] << '\n';
+		//std::cout << "First Price: " << prices[index][0] << '\n';
 
         single_price.clear();
         index++;
@@ -58,6 +60,42 @@ void read_csv()
 
     //Close the file
     ip.close();
+
+    normal SPY = normal(percgrowth(prices[0]));
+    normal IWF = normal(percgrowth(prices[1]));
+    comb_normal SPYIWF1 = comb_normal(SPY, IWF, 0.1);
+    comb_normal SPYIWF2 = comb_normal(SPY, IWF, 0.2);
+    comb_normal SPYIWF3 = comb_normal(SPY, IWF, 0.3);
+    comb_normal SPYIWF4 = comb_normal(SPY, IWF, 0.4);
+    comb_normal SPYIWF5 = comb_normal(SPY, IWF, 0.5);
+    comb_normal SPYIWF6 = comb_normal(SPY, IWF, 0.6);
+    comb_normal SPYIWF7 = comb_normal(SPY, IWF, 0.7);
+    comb_normal SPYIWF8 = comb_normal(SPY, IWF, 0.8);
+    comb_normal SPYIWF9 = comb_normal(SPY, IWF, 0.9);
+
+    std::cout << "SPY Daily Percent Growth Mean: " << SPY.mean << "\n" <<
+        "SPY Daily Percent Growth Standard Deviation: " << SPY.stdev << "\n" << "\n" <<
+        "IWF Daily Percent Growth Mean: " << IWF.mean << "\n" <<
+        "IWF Daily Percent Growth Standard Deviation: " << IWF.stdev << "\n" << "\n" <<
+        "SPY/IWF covariance: " << covar(SPY.vec, IWF.vec) << "\n" << "\n" <<
+        "10/90 SPY/IWF Daily Percent Growth Mean: " << SPYIWF1.mean << "\n" <<
+        "10/90 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF1.stdev << "\n" << "\n" <<
+        "20/80 SPY/IWF Daily Percent Growth Mean: " << SPYIWF2.mean << "\n" <<
+        "20/80 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF2.stdev << "\n" << "\n" <<
+        "30/70 SPY/IWF Daily Percent Growth Mean: " << SPYIWF3.mean << "\n" <<
+        "30/70 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF3.stdev << "\n" << "\n" <<
+        "40/60 SPY/IWF Daily Percent Growth Mean: " << SPYIWF4.mean << "\n" <<
+        "40/60 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF4.stdev << "\n" << "\n" <<
+        "50/50 SPY/IWF Daily Percent Growth Mean: " << SPYIWF5.mean << "\n" <<
+        "50/50 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF5.stdev << "\n" << "\n" <<
+        "60/40 SPY/IWF Daily Percent Growth Mean: " << SPYIWF6.mean << "\n" <<
+        "60/40 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF6.stdev << "\n" << "\n" <<
+        "70/30 SPY/IWF Daily Percent Growth Mean: " << SPYIWF7.mean << "\n" <<
+        "70/30 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF7.stdev << "\n" << "\n" <<
+        "80/20 SPY/IWF Daily Percent Growth Mean: " << SPYIWF8.mean << "\n" <<
+        "80/20 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF8.stdev << "\n" << "\n" <<
+        "90/10 SPY/IWF Daily Percent Growth Mean: " << SPYIWF9.mean << "\n" <<
+        "90/10 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF9.stdev;
 }
 
 int main()
