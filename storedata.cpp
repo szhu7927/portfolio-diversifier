@@ -21,8 +21,8 @@ void read_csv()
     //Afterward, the ETF and single_price vector are stored in ETF_list and prices, respectively
 	std::vector<std::string> ETF_list;
 	std::string ETF;
-	std::vector<std::vector<float> > prices;
-	std::vector<float> single_price;
+	std::vector<std::vector<double>> prices;
+	std::vector<double> single_price;
 
     //Parse through the excel document row by row
     //getline(ip, line) exists here to skip the first row
@@ -45,7 +45,7 @@ void read_csv()
 
         //Get the rest of the data in the row, which contains the stock prices
         while (getline(ss, token, ',')) {
-            single_price.push_back((float)atof(token.c_str()));
+            single_price.push_back((double)atof(token.c_str()));
         }
 
         //Store single_price in prices

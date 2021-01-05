@@ -1,44 +1,44 @@
 #include <cmath>
 #include <vector>
 
-std::vector<float> percgrowth(std::vector<float> vec)
+std::vector<double> percgrowth(std::vector<double> vec)
 {
-	std::vector<float> growthvec;
+	std::vector<double> growthvec;
 	for (int i = 0; i < vec.size() - 1; i++) {
 		growthvec.push_back((vec[i + 1] - vec[i]) / vec[i]);
 	}
 	return growthvec;
 }
 
-float mean_func(std::vector<float> vec)
+double mean_func(std::vector<double> vec)
 {
-	float sum = 0;
+	double sum = 0;
 	for (auto x : vec) sum += x;
 	return sum / vec.size();
 }
 
-float var(std::vector<float> vec)
+double var(std::vector<double> vec)
 {
-	float sum_num = 0;
-	float ev = mean_func(vec);
+	double sum_num = 0;
+	double ev = mean_func(vec);
 
 	for (auto x : vec) sum_num += pow(x - ev, 2);
 
 	return sum_num / (vec.size() - 1);
 }
 
-float stdev_func(std::vector<float> vec)
+double stdev_func(std::vector<double> vec)
 {
 	return pow(var(vec), 0.5);
 }
 
-float covar(std::vector<float> vec1, std::vector<float> vec2)
+double covar(std::vector<double> vec1, std::vector<double> vec2)
 {
 	if (vec1.size() != vec2.size()) throw "Vector sizes not equal";
 
-	float sum_num = 0;
-	float ev1 = mean_func(vec1);
-	float ev2 = mean_func(vec2);
+	double sum_num = 0;
+	double ev1 = mean_func(vec1);
+	double ev2 = mean_func(vec2);
 
 	for (int i = 0; i < vec1.size(); i++) {
 		sum_num += (vec1[i] - ev1) * (vec2[i] - ev2);
@@ -48,11 +48,11 @@ float covar(std::vector<float> vec1, std::vector<float> vec2)
 }
 
 struct normal {
-	std::vector<float> vec;
-	float mean;
-	float stdev;
+	std::vector<double> vec;
+	double mean;
+	double stdev;
 
-	normal(std::vector<float> vec) {
+	normal(std::vector<double> vec) {
 		this->vec = vec;
 		mean = mean_func(vec);
 		stdev = stdev_func(vec);
@@ -60,10 +60,10 @@ struct normal {
 };
 
 struct comb_normal {
-	float mean;
-	float stdev;
+	double mean;
+	double stdev;
 
-	comb_normal(normal normal1, normal normal2, float ratio) {
+	comb_normal(normal normal1, normal normal2, double ratio) {
 		if (ratio < 0 || ratio > 1) throw "Ratio not between 0 and 1 (inclusive)";
 
 		mean = normal1.mean * ratio + normal2.mean * (1 - ratio);
