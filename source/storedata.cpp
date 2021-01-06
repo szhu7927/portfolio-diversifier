@@ -12,7 +12,7 @@ void read_csv()
 {
     //Open ETF_data.csv and store file in "ip"
 	std::ifstream ip(CSV_FILE);
-    
+
     //If file fails to open, throw error
     if (!ip.is_open()) exit(EXIT_FAILURE);
 
@@ -95,7 +95,8 @@ void read_csv()
         "80/20 SPY/IWF Daily Percent Growth Mean: " << SPYIWF8.mean << "\n" <<
         "80/20 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF8.stdev << "\n" << "\n" <<
         "90/10 SPY/IWF Daily Percent Growth Mean: " << SPYIWF9.mean << "\n" <<
-        "90/10 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF9.stdev;
+        "90/10 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF9.stdev << "\n";
+        system("pause");
 }
 
 int main()
