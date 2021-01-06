@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 
-#include "ymath.cpp"
+#include ".\public\ymath.h"
 
 #define CSV_FILE "ETF_data.csv"
 
@@ -21,8 +21,8 @@ void read_csv()
     //Afterward, the ETF and single_price vector are stored in ETF_list and prices, respectively
 	std::vector<std::string> ETF_list;
 	std::string ETF;
-	std::vector<std::vector<float> > prices;
-	std::vector<float> single_price;
+	std::vector<std::vector<double> > prices;
+	std::vector<double> single_price;
 
     //Parse through the excel document row by row
     //getline(ip, line) exists here to skip the first row
@@ -45,7 +45,7 @@ void read_csv()
 
         //Get the rest of the data in the row, which contains the stock prices
         while (getline(ss, token, ',')) {
-            single_price.push_back((float)atof(token.c_str()));
+            single_price.push_back((double)atof(token.c_str()));
         }
 
         //Store single_price in prices
@@ -61,17 +61,17 @@ void read_csv()
     //Close the file
     ip.close();
 
-    normal SPY = normal(percgrowth(prices[0]));
-    normal IWF = normal(percgrowth(prices[1]));
-    comb_normal SPYIWF1 = comb_normal(SPY, IWF, 0.1);
-    comb_normal SPYIWF2 = comb_normal(SPY, IWF, 0.2);
-    comb_normal SPYIWF3 = comb_normal(SPY, IWF, 0.3);
-    comb_normal SPYIWF4 = comb_normal(SPY, IWF, 0.4);
-    comb_normal SPYIWF5 = comb_normal(SPY, IWF, 0.5);
-    comb_normal SPYIWF6 = comb_normal(SPY, IWF, 0.6);
-    comb_normal SPYIWF7 = comb_normal(SPY, IWF, 0.7);
-    comb_normal SPYIWF8 = comb_normal(SPY, IWF, 0.8);
-    comb_normal SPYIWF9 = comb_normal(SPY, IWF, 0.9);
+    Normal SPY = Normal(percgrowth(prices[0]));
+    Normal IWF = Normal(percgrowth(prices[1]));
+    CombNormal SPYIWF1 = CombNormal(SPY, IWF, 0.1);
+    CombNormal SPYIWF2 = CombNormal(SPY, IWF, 0.2);
+    CombNormal SPYIWF3 = CombNormal(SPY, IWF, 0.3);
+    CombNormal SPYIWF4 = CombNormal(SPY, IWF, 0.4);
+    CombNormal SPYIWF5 = CombNormal(SPY, IWF, 0.5);
+    CombNormal SPYIWF6 = CombNormal(SPY, IWF, 0.6);
+    CombNormal SPYIWF7 = CombNormal(SPY, IWF, 0.7);
+    CombNormal SPYIWF8 = CombNormal(SPY, IWF, 0.8);
+    CombNormal SPYIWF9 = CombNormal(SPY, IWF, 0.9);
 
     std::cout << "SPY Daily Percent Growth Mean: " << SPY.mean << "\n" <<
         "SPY Daily Percent Growth Standard Deviation: " << SPY.stdev << "\n" << "\n" <<

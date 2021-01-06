@@ -1,4 +1,4 @@
-#include "date.h"
+#include "..\public\date.h"
 
 Date::Date(int month, int day, int year) {
 	//assertion

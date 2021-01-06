@@ -1,5 +1,5 @@
-#include "date.h"
-#include "dataframe.h"
+#include "..\public\date.h"
+#include "..\public\dataframe.h"
 
 //Converts a date or an ETF to their index on the axis. Throws an exception if the index is not found.
 int DataFrame::toindex(Date date) {
