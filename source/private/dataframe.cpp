@@ -10,7 +10,7 @@ int DataFrame::toindex(Date date) {
 }
 int DataFrame::toindex(std::string etf) {
 	for (int i = 0; i < etflength; ++i) {
-		if (toupper(etf) == toupper(etfaxis[i])) return i;
+		if (etf == etfaxis[i]) return i;
 	}
 	throw std::domain_error("ETF not found in axis.");
 }
