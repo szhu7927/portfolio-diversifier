@@ -3,7 +3,7 @@
 std::vector<double> percgrowth(std::vector<double> vec)
 {
 	std::vector<double> growthvec;
-	for (int i = 0; i < vec.size() - 1; i++) {
+	for (unsigned int i = 0; i < vec.size() - 1; i++) {
 		growthvec.push_back((vec[i + 1] - vec[i]) / vec[i]);
 	}
 	return growthvec;
@@ -39,7 +39,7 @@ double covar(std::vector<double> vec1, std::vector<double> vec2)
 	double ev1 = mean_func(vec1);
 	double ev2 = mean_func(vec2);
 
-	for (int i = 0; i < vec1.size(); i++) {
+	for (unsigned int i = 0; i < vec1.size(); i++) {
 		sum_num += (vec1[i] - ev1) * (vec2[i] - ev2);
 	}
 
