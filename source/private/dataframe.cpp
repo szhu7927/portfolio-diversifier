@@ -10,7 +10,7 @@ int DataFrame::toindex(Date date) {
 }
 int DataFrame::toindex(std::string etf) {
 	for (int i = 0; i < etflength; ++i) {
-		if (etf == etfaxis[i]) return i;
+		if (toupper(etf) == toupper(etfaxis[i])) return i;
 	}
 	throw std::domain_error("ETF not found in axis.");
 }
@@ -31,14 +31,8 @@ double DataFrame::getprice(int date, std::string etf) { return price[date][toind
 double DataFrame::getprice(Date date, std::string etf) { return price[toindex(date)][toindex(etf)]; }
 
 //Returns a vector of prices for all ETFs for a specific date.
-std::vector<double> DataFrame::datedata(int date) {
-	std::vector<double> vectorbuilder;
-	for (int i = 0; i < etflength; ++i) {
-		vectorbuilder.push_back(price[date][i]);
-	}
-	return vectorbuilder;
-}
-std::vector<double> DataFrame::datedata(Date date) { return datedata(toindex(date)); }
+std::vector<double> DataFrame::datedata(int date) { return price[date]; }
+std::vector<double> DataFrame::datedata(Date date) { return price[toindex(date)]; }
 
 //Returns a vector of prices for all dates for a specific ETF.
 std::vector<double> DataFrame::etfdata(int etf) {
