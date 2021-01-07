@@ -4,6 +4,8 @@
 #include <vector>
 
 #include ".\public\ymath.h"
+#include ".\public\dataframe.h"
+#include ".\public\date.h"
 
 #define CSV_FILE "ETF_data.csv"
 
@@ -21,16 +23,16 @@ void read_csv()
     //Afterward, the ETF and single_price vector are stored in ETF_list and prices, respectively
 	std::vector<std::string> ETF_list;
 	std::string ETF;
-	std::vector<std::vector<double> > prices;
+	std::vector<std::vector<double>> prices;
 	std::vector<double> single_price;
 
     //Parse through the excel document row by row
-    //getline(ip, line) exists here to skip the first row
+    //getline(ip, line) exists here to skip the first row //EDIT: do not want to skip first row to collect dates
 	std::string line;
-	std::getline(ip, line);
+    //getline(ip, line);
 
     //Keeps track of the index to print
-    int index = 0;
+    int index = -1;
 
     //While data still exists, parse through each row
     while (std::getline(ip, line)) {
@@ -38,29 +40,52 @@ void read_csv()
 		std::istringstream ss(line);
 		std::string token;
 
-        //Get the first entry in the row, which is the name of the ETF
-        //Store the value in ETF
-		std::getline(ss, ETF, ',');
-        ETF_list.push_back(ETF);
-
-        //Get the rest of the data in the row, which contains the stock prices
-        while (getline(ss, token, ',')) {
-            single_price.push_back((double)atof(token.c_str()));
+        //Gets the dates for the first line
+        if (index == -1) {
+            //TODO: insert dates into string
         }
+        else {
+            //Get the first entry in the row, which is the name of the ETF
+            //Store the value in ETF
+            std::getline(ss, ETF, ',');
+            ETF_list.push_back(ETF);
 
-        //Store single_price in prices
-        prices.push_back(single_price);
+            //Get the rest of the data in the row, which contains the stock prices
+            while (getline(ss, token, ',')) {
+                single_price.push_back((double)atof(token.c_str()));
+            }
 
-		//std::cout << "ETF: " << ETF_list[index] << '\n';
-		//std::cout << "First Price: " << prices[index][0] << '\n';
+            //Store single_price in prices
+            prices.push_back(single_price);
 
-        single_price.clear();
+            //std::cout << "ETF: " << ETF_list[index] << '\n';
+            //std::cout << "First Price: " << prices[index][0] << '\n';
+
+            single_price.clear();
+        }
         index++;
     }
 
     //Close the file
     ip.close();
 
+    //Swap rows and columns in 2D price vector, so that invprice[i][j] refers to the ith date and the jth ETF.
+    std::vector<std::vector<double>> invprice;
+    std::vector<double> vectorbuilder;
+
+    for (int a = 0; a < prices[0].size(); ++a) {
+        for (int b = 0; b < prices.size(); ++b) {
+            vectorbuilder.push_back(prices[b][a]);
+        }
+        invprice.push_back(vectorbuilder);
+        vectorbuilder.clear();
+    }
+
+    //Stores in a DataFrame object
+    //TODO
+
+    //Printing values
+    /*
     Normal SPY = Normal(percgrowth(prices[0]));
     Normal IWF = Normal(percgrowth(prices[1]));
     CombNormal SPYIWF1 = CombNormal(SPY, IWF, 0.1);
@@ -96,10 +121,11 @@ void read_csv()
         "80/20 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF8.stdev << "\n" << "\n" <<
         "90/10 SPY/IWF Daily Percent Growth Mean: " << SPYIWF9.mean << "\n" <<
         "90/10 SPY/IWF Daily Percent Growth Standard Deviation: " << SPYIWF9.stdev << "\n";
-        system("pause");
+        */
 }
 
 int main()
 {
     read_csv();
+    system("pause");
 }
