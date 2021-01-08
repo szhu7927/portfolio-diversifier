@@ -15,7 +15,23 @@ Date::Date(int month, int day, int year) {
 	this->year = year;
 }
 
+Date::Date(std::string datestring) {
+
+	year = stoi(datestring.substr(0, 4));
+	month = stoi(datestring.substr(5, 2));
+	day = stoi(datestring.substr(8, 2));
+}
+
 bool Date::equals(Date date) {
 	if (this->year == date.year && this->month == date.month && this->day == date.day) return true;
 	return false;
+}
+
+std::string Date::tostring() {
+	std::string daydash = "-";
+	std::string monthdash = "-";
+	if (day < 10) { daydash = "-0"; }
+	if (month < 10) { monthdash = "-0"; }
+	std::string stringbuilder = std::to_string(year) + monthdash + std::to_string(month) + daydash + std::to_string(day);
+	return stringbuilder;
 }

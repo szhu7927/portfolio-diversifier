@@ -27,12 +27,27 @@ void read_csv()
 	std::vector<double> single_price;
 
     //Parse through the excel document row by row
-    //getline(ip, line) exists here to skip the first row //EDIT: do not want to skip first row to collect dates
-	std::string line;
-    //getline(ip, line);
+    //Get first line for dates
+    std::string line;
+    std::vector<std::string> datelist;
+    std::getline(ip, line);
+    std::istringstream date_ss(line);
+    std::string date_token;
+
+    //Skip first entry, which is "date"
+    std::getline(date_ss, date_token, ',');
+    while (getline(date_ss, date_token, ',')) {
+        datelist.push_back(date_token);
+    }
+
+    //Converts each element in datelist into a Date object.
+    std::vector<Date> dateobjlist;
+    for (int i = 0;  i < datelist.size(); ++i) {
+        dateobjlist.push_back(Date(datelist[i]));
+    }
 
     //Keeps track of the index to print
-    int index = -1;
+    int index = 0;
 
     //While data still exists, parse through each row
     while (std::getline(ip, line)) {
@@ -40,29 +55,23 @@ void read_csv()
 		std::istringstream ss(line);
 		std::string token;
 
-        //Gets the dates for the first line
-        if (index == -1) {
-            //TODO: insert dates into string
+        //Get the first entry in the row, which is the name of the ETF
+        //Store the value in ETF
+        std::getline(ss, ETF, ',');
+        ETF_list.push_back(ETF);
+
+        //Get the rest of the data in the row, which contains the stock prices
+        while (getline(ss, token, ',')) {
+            single_price.push_back((double)atof(token.c_str()));
         }
-        else {
-            //Get the first entry in the row, which is the name of the ETF
-            //Store the value in ETF
-            std::getline(ss, ETF, ',');
-            ETF_list.push_back(ETF);
 
-            //Get the rest of the data in the row, which contains the stock prices
-            while (getline(ss, token, ',')) {
-                single_price.push_back((double)atof(token.c_str()));
-            }
+        //Store single_price in prices
+        prices.push_back(single_price);
 
-            //Store single_price in prices
-            prices.push_back(single_price);
+        //std::cout << "ETF: " << ETF_list[index] << '\n';
+        //std::cout << "First Price: " << prices[index][0] << '\n';
 
-            //std::cout << "ETF: " << ETF_list[index] << '\n';
-            //std::cout << "First Price: " << prices[index][0] << '\n';
-
-            single_price.clear();
-        }
+        single_price.clear();
         index++;
     }
 
@@ -82,7 +91,8 @@ void read_csv()
     }
 
     //Stores in a DataFrame object
-    //TODO
+    DataFrame AlphaFrame(dateobjlist, ETF_list, invprice);
+    std::cout << AlphaFrame.getprice(3, 5) << std::endl;
 
     //Printing values
     /*
