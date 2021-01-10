@@ -21,7 +21,7 @@ void read_csv()
     //This is very poorly written right now
     //ETF tracks the name, single_price tracks the prices for a single ETF
     //Afterward, the ETF and single_price vector are stored in ETF_list and prices, respectively
-	std::vector<std::string> ETF_list;
+	std::vector<std::string> ETF_list; //used in DataFrame
 	std::string ETF;
 	std::vector<std::vector<double>> prices;
 	std::vector<double> single_price;
@@ -34,13 +34,13 @@ void read_csv()
     std::istringstream date_ss(line);
     std::string date_token;
 
-    //Skip first entry, which is "date"
+    //Skip first entry in row, which is the word "date".
     std::getline(date_ss, date_token, ',');
     while (getline(date_ss, date_token, ',')) {
         datelist.push_back(date_token);
     }
 
-    //Converts each element in datelist into a Date object.
+    //Converts each element in datelist into a Date object. This list of Date objects is used in DataFrame.
     std::vector<Date> dateobjlist;
     for (int i = 0;  i < datelist.size(); ++i) {
         dateobjlist.push_back(Date(datelist[i]));
@@ -51,6 +51,7 @@ void read_csv()
 
     //While data still exists, parse through each row
     while (std::getline(ip, line)) {
+
         //Tokenizes a single row into each data cell
 		std::istringstream ss(line);
 		std::string token;
@@ -78,7 +79,7 @@ void read_csv()
     //Close the file
     ip.close();
 
-    //Swap rows and columns in 2D price vector, so that invprice[i][j] refers to the ith date and the jth ETF.
+    //Swap rows and columns in 2D price vector, so that invprice[i][j] refers to the ith date and the jth ETF. invprice is used in DataFrame.
     std::vector<std::vector<double>> invprice;
     std::vector<double> vectorbuilder;
 
@@ -94,7 +95,7 @@ void read_csv()
     DataFrame AlphaFrame(dateobjlist, ETF_list, invprice);
     std::cout << AlphaFrame.getprice(3, 5) << std::endl;
 
-    //Printing values
+    //Printing values:
     /*
     Normal SPY = Normal(percgrowth(prices[0]));
     Normal IWF = Normal(percgrowth(prices[1]));

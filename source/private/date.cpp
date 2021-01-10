@@ -1,6 +1,7 @@
 #include "..\public\date.h"
 
-Date::Date(int month, int day, int year) {
+//Standard constructor
+Date::Date(int year, int month, int day) {
 	//assertion
 	if(month < 1 || month > 12) throw std::invalid_argument("Month must be an integer from 1 to 12.");
 	if(day < 1 || day > 31) throw std::invalid_argument("Day must be an integer from 1 to 31.");
@@ -10,11 +11,12 @@ Date::Date(int month, int day, int year) {
 		if (day > 29) throw std::invalid_argument("Day is invalid for the given month.");
 		else if (year % 4 == 0 && day == 29) throw std::invalid_argument("Day is invalid for the given month; this is not a leap year.");
 	}
+	this->year = year;
 	this->month = month;
 	this->day = day;
-	this->year = year;
 }
 
+//Takes a string of the form 2021-07-19 and makes it into a Date obbject.
 Date::Date(std::string datestring) {
 
 	year = stoi(datestring.substr(0, 4));
@@ -22,11 +24,13 @@ Date::Date(std::string datestring) {
 	day = stoi(datestring.substr(8, 2));
 }
 
+//See if two Date objects represent the same date.
 bool Date::equals(Date date) {
 	if (this->year == date.year && this->month == date.month && this->day == date.day) return true;
 	return false;
 }
 
+//Takes a Date object and returns a strong of the form 2021-07-19.
 std::string Date::tostring() {
 	std::string daydash = "-";
 	std::string monthdash = "-";
