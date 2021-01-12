@@ -1,0 +1,23 @@
+GUI todo
+
+graph price vs length w/ different ETFs as lines
+
+index of ETF list corresponds to index of prices
+
+
+**************************
+idea for graph code
+	int "space" (OR xspace, yspace)
+	int ymin, ymax, xmin, xmax
+
+**************************
+
+
+2 windows:
+	1 input which ETFs, graph
+	1 graph (expected val vs reward, 
+		 date vs ETF)
+
+slide bar with bounds
+
+moving point
