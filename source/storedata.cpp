@@ -6,7 +6,6 @@
 #include ".\public\ymath.h"
 #include ".\public\dataframe.h"
 #include ".\public\date.h"
-#include ".\public\datapt.h"
 #include ".\public\frontieralgo.h"
 
 #define CSV_FILE "ETF_data.csv"
@@ -142,7 +141,7 @@ int main()
     DataFrame AlphaFrame = read_csv();
     AlphaFrame.print();
     std::vector<std::string> input_etf_list = { "SPY", "IWF" }; //User input to determine which/how many ETFs would be analyzed. Variable length
-    std::vector<DataPT> bestpointset = find_optimal_points(AlphaFrame, input_etf_list);
-    std::cout << sizeof(DataPT) << "\n";
+    std::vector<CombNormal> bestpointset = find_optimal_points(AlphaFrame, input_etf_list);
+    std::cout << sizeof(CombNormal) << "\n";
     system("pause");
 }

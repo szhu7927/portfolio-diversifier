@@ -46,13 +46,14 @@ double covar(std::vector<double> vec1, std::vector<double> vec2)
 	return sum_num / (vec1.size() - 1);
 }
 
-Normal::Normal(std::vector<double> vec) {
+Normal::Normal(std::string etf, std::vector<double> vec) {
+	this->etf = etf;
 	this->vec = vec;
 	mean = mean_func(vec);
 	stdev = stdev_func(vec);
 };
 
-CombNormal::CombNormal(std::vector<std::pair<Normal, double> > vec) {
+CombNormal::CombNormal(std::vector<std::pair<Normal, double>> vec) {
 	double scale = 0;
 	for (std::pair<Normal, double> entry : vec) {
 		scale += entry.second;
@@ -70,4 +71,5 @@ CombNormal::CombNormal(std::vector<std::pair<Normal, double> > vec) {
 	}
 
 	stdev = pow(var, 0.5);
+	ETF_weights = vec;
 };
