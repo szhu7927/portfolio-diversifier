@@ -22,5 +22,5 @@ class CombNormal {
 public:
 	double mean;
 	double stdev;
-	CombNormal(Normal normal1, Normal normal2, double ratio);
+	CombNormal(std::vector<std::pair<Normal, double> >);
 };

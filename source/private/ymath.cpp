@@ -52,9 +52,22 @@ Normal::Normal(std::vector<double> vec) {
 	stdev = stdev_func(vec);
 };
 
-CombNormal::CombNormal(Normal normal1, Normal normal2, double ratio) {
-	if (ratio < 0 || ratio > 1) throw "Ratio not between 0 and 1 (inclusive)";
+CombNormal::CombNormal(std::vector<std::pair<Normal, double> > vec) {
+	double scale = 0;
+	for (std::pair<Normal, double> entry : vec) {
+		scale += entry.second;
+	}
 
-	mean = normal1.mean * ratio + normal2.mean * (1 - ratio);
-	stdev = pow(pow(normal1.stdev * ratio, 2) + pow(normal2.stdev * (1 - ratio), 2) + 2 * ratio * (1 - ratio) * covar(normal1.vec, normal2.vec), 0.5);
+	mean = 0;
+	double var = 0;
+	for (int i = 0; i < vec.size(); ++i) {
+		mean += vec[i].first.mean * vec[i].second / scale;
+		var += pow(vec[i].first.stdev, 2);
+
+		for (int j = i + 1; j < vec.size(); ++j) {
+			var += 2 * (vec[i].second / scale) * (vec[j].second / scale) * covar(vec[i].first.vec, vec[j].first.vec);
+		}
+	}
+
+	stdev = pow(var, 0.5);
 };
