@@ -44,3 +44,59 @@ std::vector<double> DataFrame::etfdata(int etf) {
 	return vectorbuilder;
 }
 std::vector<double> DataFrame::etfdata(std::string etf) { return etfdata(toindex(etf)); }
+
+void DataFrame::print() {
+	std::cout << "{";
+	for (int i = 0; i < etflength; ++i) {
+		std::cout << "{ ";
+		if (datelength > 3) {
+			std::cout << DataFrame::getprice(0, i) << ", ";
+			std::cout << DataFrame::getprice(1, i) << ", ";
+			std::cout << "..., ";
+			std::cout << DataFrame::getprice(datelength-1, i) << " ";
+		}
+		else {
+			for (int j = 0; j < datelength; ++j) {
+				std::cout << DataFrame::getprice(j, i) << ", ";
+			}
+		}
+		
+		if(i == etflength - 1) std::cout << "}}" << "\n";
+		else std::cout << "}," << "\n";
+	}
+
+	std::cout << "Coordinates: " << "\n";
+	std::cout << "ETF: (";
+	
+	if (etflength > 10) {
+		for (int i = 0; i < 10; ++i) {
+			std::cout << etfaxis[i] << ", ";
+		}
+		std::cout << etfaxis[etflength - 1];
+	}
+	else {
+		for (int i = 0; i < etflength; ++i) {
+			std::cout << etfaxis[i];
+			if (i != etflength - 1) std::cout << ", ";
+		}
+	}
+
+	std::cout << ")" << "\n";
+	std::cout << "Dates: (";
+	
+	if (datelength > 10) {
+		for (int i = 0; i < 10; ++i) {
+			std::cout << dateaxis[i].tostring() << ", ";
+		}
+		std::cout << "..., " << dateaxis[datelength - 1].tostring();
+	}
+	else {
+		for (int i = 0; i < datelength; ++i) {
+
+			std::cout << dateaxis[i].tostring();
+			if (i != datelength - 1) std::cout << ", ";
+		}
+	}
+
+	std::cout << ")" << "\n";
+}

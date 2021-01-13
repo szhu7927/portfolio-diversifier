@@ -3,6 +3,7 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
+#include <iostream>
 
 #include "date.h"
 
@@ -34,4 +35,7 @@ public:
 	//Returns a vector of prices for all dates for a specific ETF.
 	std::vector<double> etfdata(int etf);
 	std::vector<double> etfdata(std::string etf);
+
+	//Prints the dataframe
+	void print();
 };
