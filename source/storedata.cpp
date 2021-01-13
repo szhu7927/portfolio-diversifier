@@ -6,11 +6,13 @@
 #include ".\public\ymath.h"
 #include ".\public\dataframe.h"
 #include ".\public\date.h"
+#include ".\public\datapt.h"
+#include ".\public\frontieralgo.h"
 
 #define CSV_FILE "ETF_data.csv"
 
 
-void read_csv()
+DataFrame read_csv()
 {
     //Open ETF_data.csv and store file in "ip"
 	std::ifstream ip(CSV_FILE);
@@ -93,7 +95,7 @@ void read_csv()
 
     //Stores in a DataFrame object
     DataFrame AlphaFrame(dateobjlist, ETF_list, invprice);
-    std::cout << AlphaFrame.getprice(3, 5) << std::endl;
+    return AlphaFrame;
 
     //Printing values:
     /*
@@ -137,6 +139,9 @@ void read_csv()
 
 int main()
 {
-    read_csv();
+    DataFrame AlphaFrame = read_csv();
+    std::vector<std::string> input_etf_list = { "SPY", "IWF" }; //User input to determine which/how many ETFs would be analyzed. Variable length
+    std::vector<DataPT> bestpointset = find_optimal_points(AlphaFrame, input_etf_list);
+    std::cout << sizeof(DataPT);
     system("pause");
 }

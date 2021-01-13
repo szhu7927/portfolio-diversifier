@@ -7,6 +7,7 @@
 #include "date.h"
 
 class DataFrame {
+public:
 	int datelength;
 	int etflength;
 	std::vector<Date> dateaxis;
@@ -17,7 +18,7 @@ class DataFrame {
 	int toindex(Date date);
 	int toindex(std::string etf);
 
-public:
+//public:
 	DataFrame(std::vector<Date> dateaxis, std::vector<std::string> etfaxis, std::vector<std::vector<double>> price);
 
 	//Returns the price at a specific ETF for a specific date.

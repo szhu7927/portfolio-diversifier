@@ -5,12 +5,11 @@
 #include <vector>
 
 class Date {
-
+public:
 	int year;
 	int month;
 	int day;
 
-public:
 	//Standard constructor
 	Date(int year, int month, int day);
 
