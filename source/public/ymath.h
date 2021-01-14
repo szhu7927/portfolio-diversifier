@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <string>
+#include <iostream>
 #include <vector>
 
 std::vector<double> percgrowth(std::vector<double> vec);
@@ -21,9 +22,11 @@ public:
 };
 
 class CombNormal {
+	//AKA a DataPoint
 public:
 	double mean;
 	double stdev;
-	std::vector<std::pair<Normal, double>> ETF_weights; //A list of all used ETFs, and their corresponding weights.
+	std::vector<std::pair<std::string, double>> ETF_weights; //A list of all used ETFs, and their corresponding weights.
 	CombNormal(std::vector<std::pair<Normal, double>>);
+	void print();
 };

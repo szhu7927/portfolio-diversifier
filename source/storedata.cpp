@@ -139,9 +139,8 @@ DataFrame read_csv()
 int main()
 {
     DataFrame AlphaFrame = read_csv();
-    AlphaFrame.print();
+    //AlphaFrame.print();
     std::vector<std::string> input_etf_list = { "SPY", "IWF" }; //User input to determine which/how many ETFs would be analyzed. Variable length
-    std::vector<CombNormal> bestpointset = find_optimal_points(AlphaFrame, input_etf_list);
-    std::cout << sizeof(CombNormal) << "\n";
+    std::vector<CombNormal> bestpointset = find_optimal_points(AlphaFrame, input_etf_list); //ONLY WORKS WITH 2 ETFs RIGHT NOW 
     system("pause");
 }

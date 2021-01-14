@@ -54,9 +54,15 @@ Normal::Normal(std::string etf, std::vector<double> vec) {
 };
 
 CombNormal::CombNormal(std::vector<std::pair<Normal, double>> vec) {
+	//AKA a DataPoint
 	double scale = 0;
+	std::vector<std::pair<std::string, double>> weights;
 	for (std::pair<Normal, double> entry : vec) {
 		scale += entry.second;
+		std::pair<std::string, double> singleweight;
+		singleweight.first = entry.first.etf;
+		singleweight.second = entry.second;
+		weights.push_back(singleweight);
 	}
 
 	mean = 0;
@@ -71,5 +77,13 @@ CombNormal::CombNormal(std::vector<std::pair<Normal, double>> vec) {
 	}
 
 	stdev = pow(var, 0.5);
-	ETF_weights = vec;
+	ETF_weights = weights;
+};
+
+void CombNormal::print() {
+	for (int i = 0; i < ETF_weights.size(); ++i) {
+		std::cout << ETF_weights[i].first << " weight = " << ETF_weights[i].second << std::endl;
+	}
+	std::cout << "Return: " << mean << std::endl;
+	std::cout << "Risk: " << stdev << "\n\n";
 };
