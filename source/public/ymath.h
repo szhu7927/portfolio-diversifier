@@ -21,9 +21,10 @@ public:
 };
 
 class CombNormal {
+	//AKA a DataPoint
 public:
 	double mean;
 	double stdev;
-	std::vector<std::pair<Normal, double>> ETF_weights; //A list of all used ETFs, and their corresponding weights.
+	std::vector<std::pair<std::string, double>> ETF_weights; //A list of all used ETFs, and their corresponding weights.
 	CombNormal(std::vector<std::pair<Normal, double>>);
 };
