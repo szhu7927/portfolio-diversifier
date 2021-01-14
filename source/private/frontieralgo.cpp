@@ -5,7 +5,7 @@
 
 std::vector<CombNormal> find_optimal_points(DataFrame df, std::vector<std::string> input_etf_list) {
 	//ONLY WORKS WITH 2 ETFs RIGHT NOW
-	
+
 	//Makes the vector of input ETFs into a vector of Normal objects
 	std::vector<Normal> normallist;
 	for (std::string etf : input_etf_list) {
