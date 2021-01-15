@@ -9,7 +9,7 @@ std::vector<CombNormal> find_optimal_points(DataFrame df, std::vector<std::strin
 	//Makes the vector of input ETFs into a vector of Normal objects
 	std::vector<Normal> normallist;
 	for (std::string etf : input_etf_list) {
-		Normal singlenormal(etf, df.etfdata(etf));
+		Normal singlenormal(etf, percgrowth(df.etfdata(etf)));
 		normallist.push_back(singlenormal);
 	}
 
