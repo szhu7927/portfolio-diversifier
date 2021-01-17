@@ -55,21 +55,19 @@ Normal::Normal(std::string etf, std::vector<double> vec) {
 
 CombNormal::CombNormal(std::vector<std::pair<Normal, double>> vec) {
 	//AKA a DataPoint
+	//Scale is sum of weights
 	double scale = 0;
 	std::vector<std::pair<std::string, double>> weights;
 	for (std::pair<Normal, double> entry : vec) {
 		scale += entry.second;
-		std::pair<std::string, double> singleweight;
-		singleweight.first = entry.first.etf;
-		singleweight.second = entry.second;
-		weights.push_back(singleweight);
+		weights.push_back(std::make_pair(entry.first.etf, entry.second));
 	}
 
 	mean = 0;
 	double var = 0;
 	for (int i = 0; i < vec.size(); ++i) {
 		mean += vec[i].first.mean * vec[i].second / scale;
-		var += pow(vec[i].first.stdev, 2);
+		var += pow(vec[i].first.stdev * vec[i].second / scale, 2);
 
 		for (int j = i + 1; j < vec.size(); ++j) {
 			var += 2 * (vec[i].second / scale) * (vec[j].second / scale) * covar(vec[i].first.vec, vec[j].first.vec);
