@@ -7,6 +7,7 @@
 #include ".\public\dataframe.h"
 #include ".\public\date.h"
 #include ".\public\frontieralgo.h"
+#include ".\public\risktopointalgo.h"
 
 #define CSV_FILE "ETF_data.csv"
 
