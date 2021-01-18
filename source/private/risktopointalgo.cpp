@@ -12,7 +12,7 @@ double area(std::vector<std::pair<double, double>> vec) {
 		sum2 += vec[(i + 1) % vec.size()].first * vec[i].second;
 	}
 
-	return (sum1 - sum2) / 2;
+	return std::abs(sum1 - sum2) / 2.0;
 }
 
 Line::Line(double slope, double intercept) {
@@ -55,17 +55,18 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 
 			//If the frontier point is above the line (concave)
 			if (gety(line, frontier[1].first) < frontier[1].second) {
-				std::pair<double, double> topright = frontier[1];
-				std::pair<double, double> bottomright = std::make_pair(frontier[1].first, gety(line, frontier[1].first));
+				topright = frontier[1];
+				bottomright = std::make_pair(frontier[1].first, gety(line, frontier[1].first));
 			}
 			//If the frontier point is below the line (convex)
 			else {
-				std::pair<double, double> topright = std::make_pair(frontier[1].first, gety(line, frontier[1].first));
-				std::pair<double, double> bottomright = frontier[1];
+				topright = std::make_pair(frontier[1].first, gety(line, frontier[1].first));
+				bottomright = frontier[1];
 			}
 			polypoints.push_back(topright);
 			polypoints.push_back(bottomright);
 
+			//std::cout << polypoints[0].first << ", " << polypoints[0].second << "\n" << polypoints[1].first << ", " << polypoints[1].second << "\n" << polypoints[2].first << ", " << polypoints[2].second << "\n";
 			totalarea += area(polypoints);
 		}
 		//Last area, which is a triangle (all others are quadrilaterals)
@@ -80,13 +81,13 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 
 			//If the frontier point is above the line (concave)
 			if (gety(line, frontier[frontier.size() - 2].first) < frontier[frontier.size() - 2].second) {
-				std::pair<double, double> topleft = frontier[frontier.size() - 2];
-				std::pair<double, double> bottomleft = std::make_pair(frontier[frontier.size() - 2].first, gety(line, frontier[frontier.size() - 2].first));
+				topleft = frontier[frontier.size() - 2];
+				bottomleft = std::make_pair(frontier[frontier.size() - 2].first, gety(line, frontier[frontier.size() - 2].first));
 			}
 			//If the frontier point is below the line (convex)
 			else {
-				std::pair<double, double> topleft = std::make_pair(frontier[frontier.size() - 2].first, gety(line, frontier[frontier.size() - 2].first));
-				std::pair<double, double> bottomleft = frontier[frontier.size() - 2];
+				topleft = std::make_pair(frontier[frontier.size() - 2].first, gety(line, frontier[frontier.size() - 2].first));
+				bottomleft = frontier[frontier.size() - 2];
 			}
 			polypoints.push_back(bottomleft);
 			polypoints.push_back(topleft);
@@ -105,13 +106,13 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 
 			//If the left frontier point is above the line (concave)
 			if (gety(line, frontier[i].first) < frontier[i].second) {
-				std::pair<double, double> topleft = frontier[i];
-				std::pair<double, double> bottomleft = std::make_pair(frontier[i].first, gety(line, frontier[i].first));
+				topleft = frontier[i];
+				bottomleft = std::make_pair(frontier[i].first, gety(line, frontier[i].first));
 			}
 			//If the left frontier point is below the line (convex)
 			else {
-				std::pair<double, double> topleft = std::make_pair(frontier[i].first, gety(line, frontier[i].first));
-				std::pair<double, double> bottomleft = frontier[i];
+				topleft = std::make_pair(frontier[i].first, gety(line, frontier[i].first));
+				bottomleft = frontier[i];
 				flipped++;
 			}
 			polypoints.push_back(bottomleft);
@@ -122,13 +123,13 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 
 			//If the right frontier point is above the line (concave)
 			if (gety(line, frontier[i + 1].first) < frontier[i + 1].second) {
-				std::pair<double, double> topright = frontier[i + 1];
-				std::pair<double, double> bottomright = std::make_pair(frontier[i + 1].first, gety(line, frontier[i + 1].first));
+				topright = frontier[i + 1];
+				bottomright = std::make_pair(frontier[i + 1].first, gety(line, frontier[i + 1].first));
 			}
 			//If the right frontier point is below the line (convex)
 			else {
-				std::pair<double, double> topright = std::make_pair(frontier[i + 1].first, gety(line, frontier[i + 1].first));
-				std::pair<double, double> bottomright = frontier[i + 1];
+				topright = std::make_pair(frontier[i + 1].first, gety(line, frontier[i + 1].first));
+				bottomright = frontier[i + 1];
 				flipped++;
 			}
 			polypoints.push_back(topright);
@@ -139,6 +140,6 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 			else totalarea += area(polypoints);
 		}
 	}
-
+	
 	return totalarea;
 }
