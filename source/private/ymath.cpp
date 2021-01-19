@@ -78,10 +78,26 @@ CombNormal::CombNormal(std::vector<std::pair<Normal, double>> vec) {
 	ETF_weights = weights;
 };
 
+CombNormal::CombNormal(double stdev, double mean) {
+	this->stdev = stdev;
+	this->mean = mean;
+	std::vector<std::pair<std::string, double>> weights;
+	weights.push_back(std::make_pair("DEBUG", 0.0));
+	weights.push_back(std::make_pair("DEBUG", 0.0));
+	ETF_weights = weights;
+	//Constructor used for debugging
+};
+
 void CombNormal::print() {
+	//ONLY WORKS FOR VECTORS OF LENGTH 2
 	for (int i = 0; i < ETF_weights.size(); ++i) {
 		std::cout << ETF_weights[i].first << " weight = " << ETF_weights[i].second << std::endl;
 	}
 	std::cout << "Return: " << mean << std::endl;
 	std::cout << "Risk: " << stdev << "\n\n";
 };
+
+void CombNormal::xyprint() {
+	//To print a combnormal like a coordinate
+	std::cout << "(" << stdev << ", " << mean << ")";
+}
