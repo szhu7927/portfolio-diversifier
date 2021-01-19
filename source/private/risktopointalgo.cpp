@@ -24,24 +24,26 @@ double gety(Line line, double x) {
 	return line.slope * x + line.intercept;
 }
 
-//Total area under the curve by adding up individual areas (used like an integral in this case)
-double totalarea(std::vector<std::pair<double, double>> frontier) {
-	//Sort points from left to right
-	std::sort(frontier.begin(), frontier.end());
-
-	//Find equation of line from leftmost point to rightmost point
+//Find equation of line from leftmost point to rightmost point
+Line getline(std::vector<std::pair<double, double>> frontier) {
 	std::pair<double, double> leftpoint = frontier[0];
 	std::pair<double, double> rightpoint = frontier[frontier.size() - 1];
-	
+
 	double slope = (leftpoint.second - rightpoint.second) / (leftpoint.first - rightpoint.first);
 	double intercept = leftpoint.second - leftpoint.first * slope;
 
-	Line line = Line(slope, intercept);
+	return Line(slope, intercept);
+}
 
-	double totalarea = 0;
+//Get a single series of areas
+double intervalarea(std::vector<std::pair<double, double>> frontier, Line line, int start, int end) {
+	//Sort points from left to right
+	std::sort(frontier.begin(), frontier.end());
+
+	double intervalarea = 0;
 
 	//Add up areas
-	for (int i = 0; i < frontier.size() - 1; ++i) {
+	for (int i = start; i < end; ++i) {
 		//First area, which is a triangle
 		if (i == 0) {
 			//Vector containing points in the polygon
@@ -66,8 +68,7 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 			polypoints.push_back(topright);
 			polypoints.push_back(bottomright);
 
-			//std::cout << polypoints[0].first << ", " << polypoints[0].second << "\n" << polypoints[1].first << ", " << polypoints[1].second << "\n" << polypoints[2].first << ", " << polypoints[2].second << "\n";
-			totalarea += area(polypoints);
+			intervalarea += area(polypoints);
 		}
 		//Last area, which is a triangle (all others are quadrilaterals)
 		else if (i == frontier.size() - 2) {
@@ -92,7 +93,7 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 			polypoints.push_back(bottomleft);
 			polypoints.push_back(topleft);
 
-			totalarea += area(polypoints);
+			intervalarea += area(polypoints);
 		}
 		//General case
 		else {
@@ -136,10 +137,75 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 			polypoints.push_back(bottomright);
 
 			//Divide area by 2 if frontier intersects line
-			if (flipped == 1) totalarea += area(polypoints) / 2;
-			else totalarea += area(polypoints);
+			if (flipped == 1) intervalarea += area(polypoints) / 2;
+			else intervalarea += area(polypoints);
 		}
 	}
+
+	return intervalarea;
+}
+
+//Adding areas up to a certain point
+double cumarea(std::vector<std::pair<double, double>> frontier, Line line, int point) {
+	return intervalarea(frontier, line, 0, point);
+}
+
+//Total area under the curve by adding up individual areas (used like an integral in this case)
+double totalarea(std::vector<std::pair<double, double>> frontier) {
+	//Another sort because the line depends on it
+	std::sort(frontier.begin(), frontier.end());
+	Line line = getline(frontier);	
 	
-	return totalarea;
+	return cumarea(frontier, line, frontier.size() - 1);
+}
+
+//Returns a vector with the points and a corresponding cumulative area
+std::vector<std::pair<std::pair<double, double>, double>> cumareavector(std::vector<std::pair<double, double>> frontier) {
+	//Another sort because the line depends on it
+	std::sort(frontier.begin(), frontier.end());
+	
+	double totarea = totalarea(frontier);
+	Line line = getline(frontier);
+
+	std::vector<std::pair<std::pair<double, double>, double>> areadata;
+	double cumarearatio = 0;
+
+	for (int i = 0; i < frontier.size(); ++i) {
+		std::pair<std::pair<double, double>, double> area = std::make_pair(frontier[i], cumarearatio);
+		areadata.push_back(area);
+		
+		if (i != frontier.size() - 1) cumarearatio += intervalarea(frontier, line, i, i + 1) / totarea;
+	}
+
+	return areadata;
+}
+
+std::pair<double, double> bestpoint(std::vector<std::pair<std::pair<double, double>, double>> areadata, double risk) {
+	//Binary search algorithm
+	int left = 0;
+	int right = areadata.size() - 1;
+	int mid;
+
+	std::pair<double, double> nearest;
+	bool nearestfound = false;
+
+	while (!nearestfound) {
+		mid = (left + right - 1) / 2;
+
+		if (areadata[mid].second <= risk && risk <= areadata[mid + 1].second) nearestfound = true;
+		else if (risk > areadata[mid].second) left = mid + 1;
+		else right = mid - 1;
+	}
+
+	//Find out which surrounding point is closer, to the left or right
+	if (risk - areadata[mid].second < areadata[mid + 1].second - risk) return areadata[mid].first;
+	else return areadata[mid + 1].first;
+}
+
+void printareas(std::vector<std::pair<std::pair<double, double>, double>> areadata) {
+	std::cout << "Cumulative Proportion of Area by Point: \n";
+
+	for (auto area : areadata) {
+		std::cout << "Point: (" << area.first.first << ", " << area.first.second << "); Cumulative Area: " << area.second << "\n";
+	}
 }

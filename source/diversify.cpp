@@ -9,8 +9,7 @@ void areatest() {
     vec.push_back(std::make_pair(1, 1));
     vec.push_back(std::make_pair(1, 0));
 
-    //Should be 0.75
-    std::cout << area(vec) << "\n";
+    std::cout << "Area 1: " << area(vec) << " (Should be 0.75) \n";
 
     std::vector<std::pair<double, double>> vec1;
     vec1.push_back(std::make_pair(0, 0));
@@ -19,8 +18,17 @@ void areatest() {
     vec1.push_back(std::make_pair(2, 4));
     vec1.push_back(std::make_pair(6, 5));
 
-    //Should be 6.5
-    std::cout << totalarea(vec1) << "\n";
+    std::cout << "Area 2: " << totalarea(vec1) << " (Should be 6.5) \n \n";
+
+    std::vector<std::pair<std::pair<double, double>, double>> vec2 = cumareavector(vec1);
+    printareas(vec2);
+
+    std::cout << "\n";
+
+    double risk = 0.7;
+    std::pair<double, double> point = bestpoint(vec2, risk);
+
+    std::cout << "For risk " << risk << ", the best point is (" << point.first << ", " << point.second << ") \n";
 }
 
 int main()
