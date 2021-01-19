@@ -1,6 +1,10 @@
-#include "font.h"
+#include "guiwidget.h"
 #include <SDL2/SDL.h>
 #include <string>
+#include <vector>
+
+// Defined in guiwidget.h
+struct GUI_Widget;
 
 struct GUI_Pane {
 	Font *inner_font;
@@ -8,12 +12,9 @@ struct GUI_Pane {
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 
-	unsigned long bg_color;
+	ulong bg_color;
 
-	// TODO: button vector??? vector of other GUI objects???
-	// also, then there would be funcs like add_button and also
-	// check_if_button_is_clicked, that sounds
-	// like a good idea!
+	std::vector<GUI_Widget*> widgets;
 
 	// Constructs Font, too
 	GUI_Pane (  const std::string &window_name,
@@ -32,12 +33,23 @@ struct GUI_Pane {
 
 	void loop();
 
+	// Widget-adding methods
+	void add_button(const std::string& text, int x, int y, 
+					ulong rgba, void (*but)(GUI_Pane *pane) );
+	// Returns created pointer so graph can be publicly modified
+	GUI_Graph* add_graph(int x, int y, int w, int h, 
+				    std::vector<int> x_vec, std::vector<int> y_vec,
+					ulong fg_color);
+
+	// Misc drawing
+	// TODO: move to its own util file???
+	void switch_color(SDL_Renderer *r, ulong rgba);
+	void fill_rect(int x, int y, int w, int h, ulong color);
+
 	private:
 	int width, height;
 	
 	// Returns true if UI requires drawing change
-	bool update();
+	bool update(SDL_Event event);
 	void draw();
-
-	void fill_rect(int x, int y, int w, int h, unsigned long color);
 };

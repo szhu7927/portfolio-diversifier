@@ -1,8 +1,6 @@
 #include <iostream>
 #include "guipane.h"
 
-
- 
 GUI_Pane::GUI_Pane(  const std::string &window_name,
 				int window_width, 
 				int window_height,
@@ -55,18 +53,25 @@ GUI_Pane::GUI_Pane(  const std::string &window_name,
 
 GUI_Pane::~GUI_Pane()
 {
+	for (int i = 0; i < widgets.size(); i++)
+		delete widgets[i];
 	delete inner_font;
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 }
 
-bool GUI_Pane::update()
+bool GUI_Pane::update(SDL_Event event)
 {
-	return true;
+	bool ui_dirty = false;
+
+	for (int i = 0; i < widgets.size(); i++)
+		widgets[i]->update(event);
+
+	return ui_dirty;
 }
 
-void clear_screen(SDL_Renderer *rend, unsigned long rgba)
+void clear_screen(SDL_Renderer *rend, ulong rgba)
 {
 	int r = rgba >> 24;
 	int g = (rgba >> 16) - (r << 8);
@@ -80,29 +85,39 @@ void GUI_Pane::draw()
 {
 	clear_screen(renderer, bg_color);
 
-	inner_font->draw_string("stonks", 100, 200, 18);
-	fill_rect(200,200,100,100,0x112233FF);
+	for (int i = 0; i < widgets.size(); i++)
+		widgets[i]->draw(renderer);
 
 	SDL_RenderPresent(renderer);
 }
 
 void GUI_Pane::loop()
 {
-	SDL_Event event;
-	for (;;) {
-		if (SDL_WaitEvent(&event)){
-			switch(event.type){
-				case SDL_QUIT:
-					return;
-			}
-		}
+	bool ui_dirty = true;
 
-		if (update())
+	for (;;) {
+		SDL_Event event;
+		if (SDL_WaitEvent(&event))
+			if (event.type == SDL_QUIT)
+				return;
+
+		if (ui_dirty)
 			draw();
+		ui_dirty = update(event);
 	}
 }
 
-void GUI_Pane::fill_rect(int x, int y, int w, int h, unsigned long rgba)
+
+void GUI_Pane::switch_color(SDL_Renderer *ren, ulong rgba)
+{
+	int r = rgba >> 24;
+	int g = (rgba >> 16) - (r << 8);
+	int b = (rgba >> 8) - (r << 16) - (g << 8);
+	int a = rgba - (r << 24) - (g << 16) - (b << 8);
+	SDL_SetRenderDrawColor(ren, r, g, b, a);
+}
+
+void GUI_Pane::fill_rect(int x, int y, int w, int h, ulong rgba)
 {
 	int r = rgba >> 24;
 	int g = (rgba >> 16) - (r << 8);
@@ -116,4 +131,21 @@ void GUI_Pane::fill_rect(int x, int y, int w, int h, unsigned long rgba)
 
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_RenderFillRect(renderer, &rect);
+}
+
+void GUI_Pane::add_button(const std::string& text, int x, int y,
+						  ulong rgba, void (*but)(GUI_Pane *pane) )
+{
+	GUI_Button *b = new GUI_Button(text, x, y, rgba, but, this);
+	widgets.push_back(b);
+}
+
+GUI_Graph* GUI_Pane::add_graph(int x, int y, int w, int h, 
+						std::vector<int> x_vec, 
+						std::vector<int> y_vec, 
+						ulong fg_color )
+{
+	GUI_Graph *g = new GUI_Graph(x, y, w, h, x_vec, y_vec, fg_color, this);
+	widgets.push_back(g);
+	return g;
 }
