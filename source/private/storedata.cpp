@@ -1,6 +1,13 @@
-#include "..\public\ymath.h"
-#include "..\public\date.h"
-#include "..\public\storedata.h"
+#ifdef _WIN32
+ #include "..\public\ymath.h"
+ #include "..\public\date.h"
+ #include "..\public\storedata.h"
+#else
+ #include "../public/ymath.h"
+ #include "../public/date.h"
+ #include "../public/storedata.h"
+#endif
+ 
 
 #define CSV_FILE "ETF_data.csv"
 
@@ -17,7 +24,7 @@ DataFrame read_csv()
     //Afterward, the ETF and single_price vector are stored in ETF_list and prices, respectively
 	std::vector<std::string> ETF_list; //used in DataFrame
 	std::string ETF;
-	std::vector<std::vector<double>> prices;
+	std::vector<std::vector<double> > prices;
 	std::vector<double> single_price;
 
     //Parse through the excel document row by row
@@ -74,7 +81,7 @@ DataFrame read_csv()
     ip.close();
 
     //Swap rows and columns in 2D price vector, so that invprice[i][j] refers to the ith date and the jth ETF. invprice is used in DataFrame.
-    std::vector<std::vector<double>> invprice;
+    std::vector<std::vector<double> > invprice;
     std::vector<double> vectorbuilder;
 
     for (int a = 0; a < prices[0].size(); ++a) {

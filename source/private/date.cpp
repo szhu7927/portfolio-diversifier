@@ -1,4 +1,9 @@
-#include "..\public\date.h"
+#ifdef _WIN32
+ #include "..\public\date.h"
+#else
+ #include "../public/date.h"
+#endif
+ 
 
 //Standard constructor
 Date::Date(int year, int month, int day) {

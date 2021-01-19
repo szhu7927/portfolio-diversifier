@@ -1,7 +1,14 @@
-#include "..\public\ymath.h"
-#include "..\public\date.h"
-#include "..\public\dataframe.h"
-#include "..\public\frontieralgo.h"
+#ifdef _WIN32
+ #include "..\public\ymath.h"
+ #include "..\public\date.h"
+ #include "..\public\dataframe.h"
+ #include "..\public\frontieralgo.h"
+#else
+ #include "../public/ymath.h"
+ #include "../public/date.h"
+ #include "../public/dataframe.h"
+ #include "../public/frontieralgo.h"
+#endif
 
 std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist) {
 	//Starts off with one point
@@ -124,7 +131,7 @@ std::vector<CombNormal> find_optimal_points(DataFrame df, std::vector<std::strin
 		std::pair<Normal, double> etfweight2 = std::make_pair(normallist[1], 1 - i);
 
 		//Makes both of these pairs into a CombNormal, and adds it to the list.
-		std::vector<std::pair<Normal, double>> pairvector = { etfweight1, etfweight2 };
+		std::vector<std::pair<Normal, double> > pairvector = { etfweight1, etfweight2 };
 		pointlist.push_back(CombNormal(pairvector));
 	}
 

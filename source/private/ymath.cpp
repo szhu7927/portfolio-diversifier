@@ -1,4 +1,8 @@
-#include "..\public\ymath.h"
+#ifdef _WIN32
+ #include "..\public\ymath.h"
+#else
+ #include "../public/ymath.h"
+#endif
 
 std::vector<double> percgrowth(std::vector<double> vec)
 {
@@ -53,11 +57,11 @@ Normal::Normal(std::string etf, std::vector<double> vec) {
 	stdev = stdev_func(vec);
 };
 
-CombNormal::CombNormal(std::vector<std::pair<Normal, double>> vec) {
+CombNormal::CombNormal(std::vector<std::pair<Normal, double> > vec) {
 	//AKA a DataPoint
 	//Scale is sum of weights
 	double scale = 0;
-	std::vector<std::pair<std::string, double>> weights;
+	std::vector<std::pair<std::string, double> > weights;
 	for (std::pair<Normal, double> entry : vec) {
 		scale += entry.second;
 		weights.push_back(std::make_pair(entry.first.etf, entry.second));
@@ -81,7 +85,7 @@ CombNormal::CombNormal(std::vector<std::pair<Normal, double>> vec) {
 CombNormal::CombNormal(double stdev, double mean) {
 	this->stdev = stdev;
 	this->mean = mean;
-	std::vector<std::pair<std::string, double>> weights;
+	std::vector<std::pair<std::string, double> > weights;
 	weights.push_back(std::make_pair("DEBUG", 0.0));
 	weights.push_back(std::make_pair("DEBUG", 0.0));
 	ETF_weights = weights;

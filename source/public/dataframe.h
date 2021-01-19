@@ -13,13 +13,13 @@ public:
 	int etflength;
 	std::vector<Date> dateaxis;
 	std::vector<std::string> etfaxis;
-	std::vector<std::vector<double>> price;
+	std::vector<std::vector<double> > price;
 
 	//Converts a date or an ETF to their index on the axis. Throws an exception if the index is not found.
 	int toindex(Date date);
 	int toindex(std::string etf);
 
-	DataFrame(std::vector<Date> dateaxis, std::vector<std::string> etfaxis, std::vector<std::vector<double>> price);
+	DataFrame(std::vector<Date> dateaxis, std::vector<std::string> etfaxis, std::vector<std::vector<double> > price);
 
 	//Returns the price at a specific ETF for a specific date.
 	double getprice(int date, int etf);

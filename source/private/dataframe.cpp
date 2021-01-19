@@ -1,5 +1,10 @@
-#include "..\public\date.h"
-#include "..\public\dataframe.h"
+#ifdef _WIN32
+ #include "..\public\date.h"
+ #include "..\public\dataframe.h"
+#else
+ #include "../public/date.h"
+ #include "../public/dataframe.h"
+#endif
 
 //Converts a date or an ETF to their index on the axis. Throws an exception if the index is not found. Case-sensitive, should stay in all caps.
 int DataFrame::toindex(Date date) {
@@ -15,7 +20,7 @@ int DataFrame::toindex(std::string etf) {
 	throw std::domain_error("ETF not found in axis.");
 }
 
-DataFrame::DataFrame(std::vector<Date> dateaxis, std::vector<std::string> etfaxis, std::vector<std::vector<double>> price) {
+DataFrame::DataFrame(std::vector<Date> dateaxis, std::vector<std::string> etfaxis, std::vector<std::vector<double> > price) {
 	//The dates make up the "x-axis" and the ETFs make up the "y-axis". Price[i][j] refer to the ith date and the jth ETF.
 	//The ETF should be in all caps.
 	datelength = dateaxis.size();

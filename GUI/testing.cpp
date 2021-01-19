@@ -22,23 +22,23 @@ int main(int argc, char **argv)
 								 "tom_vii_font.png", FONTCHARS, 
 								 FONT_WIDTH, FONT_HEIGHT, FONTSIZE_W, FONTSIZE_H);
 	
-	//gui->add_button("meh",100, 100,0xBEEF12FF, rando_print);
+	gui->add_button("Print in console",100, 100,0xBEEF12FF, rando_print);
 	
-	std::vector<int> poopx;
-	poopx.push_back(1);
-	poopx.push_back(2);
-	poopx.push_back(3);
-	poopx.push_back(4);
-	std::vector<int> poopy;
-	poopy.push_back(1);
-	poopy.push_back(2);
-	poopy.push_back(3);
-	poopy.push_back(4);
+	std::vector<int> testx;
+	testx.push_back(1);
+	testx.push_back(2);
+	testx.push_back(3);
+	testx.push_back(4);
+	std::vector<int> testy;
+	testy.push_back(5);
+	testy.push_back(2);
+	testy.push_back(9);
+	testy.push_back(2);
 	
-	GUI_Graph *g = gui->add_graph(20, 20, 200, 200, poopx, poopy, 0x1234EEFF);
-	GUI_Graph *g2 = gui->add_graph(20, 230, 200, 200, poopx, poopy, 0x1234EEFF);
-	GUI_Graph *g3 = gui->add_graph(230, 20, 200, 200, poopx, poopy, 0x1234EEFF);
-	GUI_Graph *g4 = gui->add_graph(230, 230, 200, 200, poopx, poopy, 0x1234EEFF);
+	//GUI_Graph *g = gui->add_graph(20, 20, 450, 450, testx, testy, 0x1234EEFF);
+	//GUI_Graph *g2 = gui->add_graph(20, 230, 200, 200, testx, testy, 0x1234EEFF);
+	//GUI_Graph *g3 = gui->add_graph(230, 20, 200, 200, testx, testy, 0x1234EEFF);
+	//GUI_Graph *g4 = gui->add_graph(230, 230, 200, 200, testx, testy, 0x1234EEFF);
 	//g->tick_x_min = 0;
 	//g->tick_y_min = 0;
 

@@ -5,6 +5,10 @@
 #include <sstream>
 #include <vector>
 
-#include "..\public\dataframe.h"
+#ifdef _WIN32
+ #include "..\public\dataframe.h"
+#else
+ #include "../public/dataframe.h"
+#endif
 
 DataFrame read_csv();

@@ -26,8 +26,8 @@ class CombNormal {
 public:
 	double mean;
 	double stdev;
-	std::vector<std::pair<std::string, double>> ETF_weights; //A list of all used ETFs, and their corresponding weights.
-	CombNormal(std::vector<std::pair<Normal, double>>);
+	std::vector<std::pair<std::string, double> > ETF_weights; //A list of all used ETFs, and their corresponding weights.
+	CombNormal(std::vector<std::pair<Normal, double> >);
 	CombNormal(double mean, double stdev); //Direct implementation for debugging
 	void print();
 	void xyprint();

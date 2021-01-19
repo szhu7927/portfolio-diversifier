@@ -1,9 +1,14 @@
-#include "..\public\risktopointalgo.h"
-#include "..\public\ymath.h"
+#ifdef _WIN32
+ #include "..\public\risktopointalgo.h"
+ #include "..\public\ymath.h"
+#else
+ #include "../public/risktopointalgo.h"
+ #include "../public/ymath.h"
+#endif
 
 //Uses the Shoelace Theorem to calculate the area of a convex polygon
 //Points must be put in clockwise order;
-double area(std::vector<std::pair<double, double>> vec) {
+double area(std::vector<std::pair<double, double> > vec) {
 	double sum1 = 0;
 	double sum2 = 0;
 
@@ -25,7 +30,7 @@ double gety(Line line, double x) {
 }
 
 //Find equation of line from leftmost point to rightmost point
-Line getline(std::vector<std::pair<double, double>> frontier) {
+Line getline(std::vector<std::pair<double, double> > frontier) {
 	std::pair<double, double> leftpoint = frontier[0];
 	std::pair<double, double> rightpoint = frontier[frontier.size() - 1];
 
@@ -36,7 +41,7 @@ Line getline(std::vector<std::pair<double, double>> frontier) {
 }
 
 //Get a single series of areas
-double intervalarea(std::vector<std::pair<double, double>> frontier, Line line, int start, int end) {
+double intervalarea(std::vector<std::pair<double, double> > frontier, Line line, int start, int end) {
 	//Sort points from left to right
 	std::sort(frontier.begin(), frontier.end());
 
@@ -47,7 +52,7 @@ double intervalarea(std::vector<std::pair<double, double>> frontier, Line line, 
 		//First area, which is a triangle
 		if (i == 0) {
 			//Vector containing points in the polygon
-			std::vector<std::pair<double, double>> polypoints;
+			std::vector<std::pair<double, double> > polypoints;
 
 			std::pair<double, double> left = frontier[0];
 			polypoints.push_back(left);
@@ -72,7 +77,7 @@ double intervalarea(std::vector<std::pair<double, double>> frontier, Line line, 
 		}
 		//Last area, which is a triangle (all others are quadrilaterals)
 		else if (i == frontier.size() - 2) {
-			std::vector<std::pair<double, double>> polypoints;
+			std::vector<std::pair<double, double> > polypoints;
 
 			std::pair<double, double> right = frontier[frontier.size() - 1];
 			polypoints.push_back(right);
@@ -100,7 +105,7 @@ double intervalarea(std::vector<std::pair<double, double>> frontier, Line line, 
 			//Tracks if frontier points intersect line
 			int flipped = 0;
 
-			std::vector<std::pair<double, double>> polypoints;
+			std::vector<std::pair<double, double> > polypoints;
 
 			std::pair<double, double> topleft;
 			std::pair<double, double> bottomleft;
@@ -146,12 +151,12 @@ double intervalarea(std::vector<std::pair<double, double>> frontier, Line line, 
 }
 
 //Adding areas up to a certain point
-double cumarea(std::vector<std::pair<double, double>> frontier, Line line, int point) {
+double cumarea(std::vector<std::pair<double, double> > frontier, Line line, int point) {
 	return intervalarea(frontier, line, 0, point);
 }
 
 //Total area under the curve by adding up individual areas (used like an integral in this case)
-double totalarea(std::vector<std::pair<double, double>> frontier) {
+double totalarea(std::vector<std::pair<double, double> > frontier) {
 	//Another sort because the line depends on it
 	std::sort(frontier.begin(), frontier.end());
 	Line line = getline(frontier);	
@@ -160,14 +165,14 @@ double totalarea(std::vector<std::pair<double, double>> frontier) {
 }
 
 //Returns a vector with the points and a corresponding cumulative area
-std::vector<std::pair<std::pair<double, double>, double>> cumareavector(std::vector<std::pair<double, double>> frontier) {
+std::vector<std::pair<std::pair<double, double>, double> > cumareavector(std::vector<std::pair<double, double>> frontier) {
 	//Another sort because the line depends on it
 	std::sort(frontier.begin(), frontier.end());
 	
 	double totarea = totalarea(frontier);
 	Line line = getline(frontier);
 
-	std::vector<std::pair<std::pair<double, double>, double>> areadata;
+	std::vector<std::pair<std::pair<double, double>, double> > areadata;
 	double cumarearatio = 0;
 
 	for (int i = 0; i < frontier.size(); ++i) {
@@ -180,7 +185,7 @@ std::vector<std::pair<std::pair<double, double>, double>> cumareavector(std::vec
 	return areadata;
 }
 
-std::pair<double, double> bestpoint(std::vector<std::pair<std::pair<double, double>, double>> areadata, double risk) {
+std::pair<double, double> bestpoint(std::vector<std::pair<std::pair<double, double>, double> > areadata, double risk) {
 	//Binary search algorithm
 	int left = 0;
 	int right = areadata.size() - 1;
@@ -202,7 +207,7 @@ std::pair<double, double> bestpoint(std::vector<std::pair<std::pair<double, doub
 	else return areadata[mid + 1].first;
 }
 
-void printareas(std::vector<std::pair<std::pair<double, double>, double>> areadata) {
+void printareas(std::vector<std::pair<std::pair<double, double>, double> > areadata) {
 	std::cout << "Cumulative Proportion of Area by Point: \n";
 
 	for (auto area : areadata) {

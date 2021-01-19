@@ -1,9 +1,16 @@
-#include ".\public\storedata.h"
-#include ".\public\frontieralgo.h"
-#include ".\public\risktopointalgo.h"
+#ifdef _WIN32
+ #include ".\public\storedata.h"
+ #include ".\public\frontieralgo.h"
+ #include ".\public\risktopointalgo.h"
+#else
+ #include "./public/storedata.h"
+ #include "./public/frontieralgo.h"
+ #include "./public/risktopointalgo.h"
+#endif
+
 
 void areatest() {
-    std::vector<std::pair<double, double>> vec;
+    std::vector<std::pair<double, double> > vec;
     vec.push_back(std::make_pair(0, 0));
     vec.push_back(std::make_pair(0, .5));
     vec.push_back(std::make_pair(1, 1));
@@ -11,7 +18,7 @@ void areatest() {
 
     std::cout << "Area 1: " << area(vec) << " (Should be 0.75) \n";
 
-    std::vector<std::pair<double, double>> vec1;
+    std::vector<std::pair<double, double> > vec1;
     vec1.push_back(std::make_pair(0, 0));
     vec1.push_back(std::make_pair(1, 3));
     vec1.push_back(std::make_pair(7, 7));
@@ -20,7 +27,7 @@ void areatest() {
 
     std::cout << "Area 2: " << totalarea(vec1) << " (Should be 6.5) \n \n";
 
-    std::vector<std::pair<std::pair<double, double>, double>> vec2 = cumareavector(vec1);
+    std::vector<std::pair<std::pair<double, double>, double> > vec2 = cumareavector(vec1);
     printareas(vec2);
 
     std::cout << "\n";
