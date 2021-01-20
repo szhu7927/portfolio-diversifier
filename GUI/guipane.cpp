@@ -133,19 +133,32 @@ void GUI_Pane::fill_rect(int x, int y, int w, int h, ulong rgba)
 	SDL_RenderFillRect(renderer, &rect);
 }
 
-void GUI_Pane::add_button(const std::string& text, int x, int y,
+void GUI_Pane::add_button(const std::string& label,
+						  const std::string& text, int x, int y,
 						  ulong rgba, void (*but)(GUI_Pane *pane) )
 {
 	GUI_Button *b = new GUI_Button(text, x, y, rgba, but, this);
+	widget_labels.push_back(label);
 	widgets.push_back(b);
 }
 
-GUI_Graph* GUI_Pane::add_graph(int x, int y, int w, int h, 
+GUI_Graph* GUI_Pane::add_graph(const std::string& label,
+						int x, int y, int w, int h, 
 						std::vector<int> x_vec, 
 						std::vector<int> y_vec, 
 						ulong fg_color )
 {
 	GUI_Graph *g = new GUI_Graph(x, y, w, h, x_vec, y_vec, fg_color, this);
+	widget_labels.push_back(label);
 	widgets.push_back(g);
 	return g;
+}
+
+
+GUI_Widget* GUI_Pane::find_widget_by_label(const std::string& label)
+{
+	for (int i = 0; i < widget_labels.size(); i++)
+		if (widget_labels[i] == label)
+			return widgets[i];
+	return NULL;
 }

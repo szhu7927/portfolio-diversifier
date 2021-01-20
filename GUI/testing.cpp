@@ -22,7 +22,8 @@ int main(int argc, char **argv)
 								 "tom_vii_font.png", FONTCHARS, 
 								 FONT_WIDTH, FONT_HEIGHT, FONTSIZE_W, FONTSIZE_H);
 	
-	gui->add_button("Print in console",100, 100,0xBEEF12FF, rando_print);
+	gui->add_button("picbuttn", "Print in console",100, 100,0xBEEF12FF, rando_print);
+
 	
 	std::vector<int> testx;
 	testx.push_back(1);

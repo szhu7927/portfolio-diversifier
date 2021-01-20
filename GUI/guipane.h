@@ -15,6 +15,8 @@ struct GUI_Pane {
 	ulong bg_color;
 
 	std::vector<GUI_Widget*> widgets;
+	// Contains the "name" of each widget
+	std::vector<std::string> widget_labels;
 
 	// Constructs Font, too
 	GUI_Pane (  const std::string &window_name,
@@ -33,13 +35,20 @@ struct GUI_Pane {
 
 	void loop();
 
+	GUI_Widget* find_widget_by_label(const std::string& label);
+
 	// Widget-adding methods
-	void add_button(const std::string& text, int x, int y, 
+	void add_button(const std::string& label,
+					const std::string& text, int x, int y, 
 					ulong rgba, void (*but)(GUI_Pane *pane) );
 	// Returns created pointer so graph can be publicly modified
-	GUI_Graph* add_graph(int x, int y, int w, int h, 
-				    std::vector<int> x_vec, std::vector<int> y_vec,
+	GUI_Graph* add_graph(const std::string& label,
+				    int x, int y, int w, int h,
+					std::vector<int> x_vec, std::vector<int> y_vec,
 					ulong fg_color);
+							
+
+
 
 	// Misc drawing
 	// TODO: move to its own util file???
