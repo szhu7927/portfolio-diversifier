@@ -38,17 +38,16 @@ void areatest() {
     std::cout << "For risk " << risk << ", the best point is (" << point.first << ", " << point.second << ") \n";
 }
 
-//The real main
 int main()
 {
-    //uncomment the line below to see a test of the algorithm
+    //testing the algorithm
     //fa_debug();
+
     DataFrame AlphaFrame = read_csv();
     //AlphaFrame.print();
     std::vector<std::string> input_etf_list = { "SPY", "VTV" }; //User input to determine which/how many ETFs would be analyzed. Variable length
     double increment = .1;
-    //uncommenting the below line would theoretically compile but don't
-    //std::vector<CombNormal> bestpointset = find_optimal_points(AlphaFrame, input_etf_list, increment); //ONLY WORKS WITH 2 ETFs RIGHT NOW 
+    std::vector<CombNormal> bestpointset = find_optimal_points(AlphaFrame, input_etf_list, increment); //ONLY WORKS WITH 2 ETFs RIGHT NOW 
 
     //areatest();
     system("pause");

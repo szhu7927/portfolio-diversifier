@@ -93,7 +93,6 @@ CombNormal::CombNormal(double stdev, double mean) {
 };
 
 void CombNormal::print() {
-	//ONLY WORKS FOR VECTORS OF LENGTH 2
 	for (int i = 0; i < ETF_weights.size(); ++i) {
 		std::cout << ETF_weights[i].first << " weight = " << ETF_weights[i].second << std::endl;
 	}
