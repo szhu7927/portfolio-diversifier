@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cassert>
 #include <limits>
+#include <climits>
 
 // TODO: remains as tom7 font, should change?
 #define FONTPIC "tom_vii_font.png"
