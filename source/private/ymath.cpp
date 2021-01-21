@@ -57,7 +57,7 @@ Normal::Normal(std::string etf, std::vector<double> vec) {
 	stdev = stdev_func(vec);
 };
 
-CombNormal::CombNormal(std::vector<std::pair<Normal, double> > vec) {
+CombNormal::CombNormal(std::vector<std::pair<Normal, double>> vec) {
 	//AKA a DataPoint
 	//Scale is sum of weights
 	double scale = 0;

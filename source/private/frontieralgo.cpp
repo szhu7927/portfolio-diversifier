@@ -20,7 +20,7 @@ std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist) {
 		CombNormal new_point = rawlist[index];
 
 		/*
-		Three cases: (1) new_point has a higher risk than any other proccessed point, (2) new_point has a lower risk
+		Two cases: (1) new_point has a higher risk than any other proccessed point, (2) new_point has a lower risk
 		than any other processed point / new_point has a risk in between two processed points (most likely).
 
 		Not currently accounting for equal risk values.
@@ -81,6 +81,36 @@ std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist) {
 	return processed;
 }
 
+std::vector<std::vector<double>> weight_generator(double inc, int length) {
+	std::vector<std::vector<double>> builder;
+	switch (length) {
+	case 2:
+		for (double i = 0; i <= 1; i += inc) {
+			builder.push_back({ i, 1 - i });
+		}
+		break;
+	case 3:
+		for (double i = 0; i <= 1; i += inc) {
+			for (double j = 0; j <= 1 - i; j += inc) {
+				builder.push_back({ i, j, 1 - i - j });
+			}
+		}
+		break;
+	case 4:
+		for (double i = 0; i <= 1; i += inc) {
+			for (double j = 0; j <= 1 - i; j += inc) {
+				for (double k = 0; k <= 1 - i - j; k += inc) {
+					builder.push_back({ i, j, k, 1-i-j-k });
+				}
+			}
+		}
+		break;
+	}
+	//See how many points are generated.
+	//std::cout << builder.size() << std::endl;
+	return builder;
+}
+
 std::vector<CombNormal> raw_point_generator(DataFrame df, std::vector<std::string> input_etf_list, double inc) {
 	//Precondition: inc must evenly divide 1.
 	//ONLY WORKS WITH 2 ETFs RIGHT NOW
@@ -88,103 +118,29 @@ std::vector<CombNormal> raw_point_generator(DataFrame df, std::vector<std::strin
 	//Makes sure that increment is fits the conditions: 0 < inc <= 1.
 	if (0 >= inc || inc > 1) throw std::invalid_argument("The increment must be greater than zero, and less than or equal to 1.");
 
-	//Finds out how many ETFs are being worked with.
-	int etfsize = input_etf_list.size();
+	//Instantiates variables used
+	std::vector<std::pair<Normal, double>> pairvector;
+	std::vector<CombNormal> rawpointlist;
 
-	//Makes the vector of input ETFs into a vector of Normal objects
+	//Generates the vector of Normals
 	std::vector<Normal> normallist;
 	for (std::string etf : input_etf_list) {
 		Normal singlenormal(etf, percgrowth(df.etfdata(etf)));
 		normallist.push_back(singlenormal);
 	}
 
-	//Instantiates where the CombNormal points will be stored.
-	std::vector<CombNormal> rawpointlist;
+	//Generates the weightings (x amount of doubles that add up to 1)
+	std::vector<std::vector<double>> weightings = weight_generator(inc, input_etf_list.size());
 
-	//Generator of all points (CombNormals) for the given increment.
-	//Weightings for 2 ETFs.
-	for (double i = 0; i <= 1; i += inc) {
-
-		//Creates pairs of ETFs and their weights.
-		std::pair<Normal, double> etfweight1 = std::make_pair(normallist[0], i);
-		std::pair<Normal, double> etfweight2 = std::make_pair(normallist[1], 1 - i);
-
-		//Makes both of these pairs into a CombNormal, and adds it to the list.
-		std::vector<std::pair<Normal, double>> pairvector = { etfweight1, etfweight2 };
+	//Combines normallist and weight_generator to add each possible CombNormal to the list.
+	for (std::vector<double> single_weight_list : weightings) {
+		for (int i = 0; i < single_weight_list.size(); ++i) {
+			std::pair<Normal, double> weight_pair = std::make_pair(normallist[i], single_weight_list[i]);
+			pairvector.push_back(weight_pair);
+		}
 		rawpointlist.push_back(CombNormal(pairvector));
+		pairvector = {};
 	}
-	
-	/*
-	//Builds off of the previous generator for 3 or more ETFs.
-	std::vector<CombNormal> templist = rawpointlist;
-	std::vector<CombNormal> accuraterawpointlist;
-
-	if (etfsize > 2) {
-		//For each to-be-considered ETF in the list.
-		for (int index = 2; index < etfsize; ++index) {
-
-			//Index of rawpointlist to be cloned 1/inc + 1 times with different weights.
-			for (double wc = 0; wc < rawpointlist.size(); ++wc) {
-
-				//Finds the already-espablished vector of weights of the raw point.
-				std::vector<std::pair<Normal, double>> extendedweight;
-				for (int j = 0; j < rawpointlist[wc].ETF_weights.size(); ++j) {
-					std::string newetf = rawpointlist[wc].ETF_weights[j].first;
-
-					//Finds which normal corresponds with the string, and then adds the pair to the list.
-					int normalindex = 0;
-					for (int k = 0; k < normallist.size(); ++k) {
-						if (normallist[k].etf == newetf) {
-							normalindex = k;
-							break;
-						}
-					}
-
-					//Makes a pair and adds it to the established pair list.
-					Normal estnormal = normallist[normalindex];
-					double estweight = rawpointlist[wc].ETF_weights[j].second;
-					std::pair<Normal, double> newpair = std::make_pair(estnormal, estweight);
-					extendedweight.push_back(newpair);
-				}
-
-				//Generates different weights in increments of inc.
-				for (double i = 0; i <= 1; i += inc) {
-
-					//Generates new weight paired with its ETF.
-					std::pair<Normal, double> newweight = std::make_pair(normallist[index], i);
-
-					//Merges the two vectors.
-					std::vector<std::pair<Normal, double>> weightclone = extendedweight;
-					weightclone.push_back(newweight);
-
-					//Regenerate this point, and add it to templist.
-					CombNormal addition(weightclone);
-					templist.push_back(addition);
-				}
-			}
-
-			//After each ETF is processed, update the rawpointlist.
-			rawpointlist = templist;
-		}
-
-		//Trashes the points where the weights do not add up to 1.
-		for (int r = 0; r < rawpointlist.size(); ++r) {
-			double add_to_one = 0.0;
-			for (int s = 0; s < rawpointlist[r].ETF_weights.size(); ++s) {
-				add_to_one += rawpointlist[r].ETF_weights[s].second;
-			}
-			if (add_to_one > .996 && add_to_one < 1.004) {
-				accuraterawpointlist.push_back(rawpointlist[r]);
-			}
-		}
-	}
-
-	for (int y = 0; y < rawpointlist.size(); ++y) {
-		accuraterawpointlist[y].print();
-	}
-	
-	return accuraterawpointlist;
-	*/
 	return rawpointlist;
 }
 
@@ -209,13 +165,13 @@ std::vector<CombNormal> find_optimal_points(DataFrame df, std::vector<std::strin
 	}
 
 	//DEBUG: print all rewards and risks
+	/*
 	for (CombNormal datapoint : processedpoints) {
 		datapoint.print();
 	}
+	*/
 
-	//DEBUG
-	std::vector<CombNormal> test;
-	return test;
+	return processedpoints;
 }
 
 //Run this to test the algorithm

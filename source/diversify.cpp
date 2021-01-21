@@ -42,11 +42,16 @@ int main()
 {
     //testing the algorithm
     //fa_debug();
-
     DataFrame AlphaFrame = read_csv();
     //AlphaFrame.print();
+    //Options: SPY, IWF, VTV, SCHD, USMV, VEA, VWO, AGG, LQD, GLD
     std::vector<std::string> input_etf_list = { "SPY", "VTV" }; //User input to determine which/how many ETFs would be analyzed. Variable length
     double increment = .1;
+
+    //Raw points, to be visible in graph 1.
+    std::vector<CombNormal> rawpointset = raw_point_generator(AlphaFrame, input_etf_list, increment);
+
+    //Processed points, to be visible in graph 2.
     std::vector<CombNormal> bestpointset = find_optimal_points(AlphaFrame, input_etf_list, increment); //ONLY WORKS WITH 2 ETFs RIGHT NOW 
 
     //areatest();

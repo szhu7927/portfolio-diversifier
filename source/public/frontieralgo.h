@@ -11,6 +11,8 @@
 
 std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist);
 
+std::vector<std::vector<double>> weight_generator(double inc, int length);
+
 //Precondition: inc must evenly divide 1.
 std::vector<CombNormal> raw_point_generator(DataFrame df, std::vector<std::string> input_etf_list, double inc);
 
