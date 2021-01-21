@@ -66,7 +66,7 @@ bool GUI_Pane::update(SDL_Event event)
 	bool ui_dirty = false;
 
 	for (int i = 0; i < widgets.size(); i++)
-		widgets[i]->update(event);
+		ui_dirty = ui_dirty || widgets[i]->update(event);
 
 	return ui_dirty;
 }
@@ -86,7 +86,8 @@ void GUI_Pane::draw()
 	clear_screen(renderer, bg_color);
 
 	for (int i = 0; i < widgets.size(); i++)
-		widgets[i]->draw(renderer);
+		if (!widgets[i]->hidden)
+			widgets[i]->draw(renderer);
 
 	SDL_RenderPresent(renderer);
 }
@@ -101,9 +102,14 @@ void GUI_Pane::loop()
 			if (event.type == SDL_QUIT)
 				return;
 
-		if (ui_dirty)
+		if (!ui_dirty)
+			ui_dirty = update(event);
+		if (ui_dirty) {
 			draw();
-		ui_dirty = update(event);
+			SDL_Delay(50);
+			draw();
+		}
+		ui_dirty = false;
 	}
 }
 
@@ -144,8 +150,8 @@ void GUI_Pane::add_button(const std::string& label,
 
 GUI_Graph* GUI_Pane::add_graph(const std::string& label,
 						int x, int y, int w, int h, 
-						std::vector<int> x_vec, 
-						std::vector<int> y_vec, 
+						std::vector<float> x_vec, 
+						std::vector<float> y_vec, 
 						ulong fg_color )
 {
 	GUI_Graph *g = new GUI_Graph(x, y, w, h, x_vec, y_vec, fg_color, this);

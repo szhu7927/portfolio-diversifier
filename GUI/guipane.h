@@ -44,7 +44,7 @@ struct GUI_Pane {
 	// Returns created pointer so graph can be publicly modified
 	GUI_Graph* add_graph(const std::string& label,
 				    int x, int y, int w, int h,
-					std::vector<int> x_vec, std::vector<int> y_vec,
+					std::vector<float> x_vec, std::vector<float> y_vec,
 					ulong fg_color);
 							
 

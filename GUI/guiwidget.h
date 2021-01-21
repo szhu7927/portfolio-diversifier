@@ -9,7 +9,9 @@ typedef unsigned long ulong;
 // Interface for items that are placed on GUI pane
 struct GUI_Widget
 {
-	GUI_Widget(){}
+	bool hidden;
+
+	GUI_Widget() { hidden = false; }
 	virtual ~GUI_Widget(){}
 	virtual bool update(SDL_Event event) = 0;
 	virtual void draw(SDL_Renderer *rend) = 0;
@@ -42,13 +44,16 @@ struct GUI_Button : public GUI_Widget
 		ulong color;
 		void (*button_func)(GUI_Pane *pane);
 		GUI_Pane *outer_pane;
+
+		// For drawing button as darker when pressed
+		bool pressed_this_frame;
 };
 
 
 struct GUI_Graph : public GUI_Widget
 {
 	GUI_Graph(int loc_x, int loc_y, int dim_w, int dim_h, 
-			   std::vector<int> x_vec, std::vector<int> y_vec, 
+			   std::vector<float> x_vec, std::vector<float> y_vec, 
 			   ulong fg_color, GUI_Pane *pane);
 
 	~GUI_Graph();
@@ -64,10 +69,10 @@ struct GUI_Graph : public GUI_Widget
 	int x, y;
 	int width, height; 
 
-	// Here tick_x and tick_y refer to tick marks on graph, 
+	// Here gr_x and gr_y refer to location on graph, 
 	// not locations on the GUI Pane.
-	int tick_x_min, tick_y_min;
-	int tick_x_max, tick_y_max;
+	float gr_x_min, gr_y_min;
+	float gr_x_max, gr_y_max;
 
 	ulong background_color;
 	// Foreground := Like, the color of the dots and stuff
@@ -79,10 +84,10 @@ struct GUI_Graph : public GUI_Widget
 		Font *inner_font;
 
 		// Invariant: these two vectors should have the 
-		// same length. The value at ticks_x[i] corresponds 
-		// to the value at ticks_y[i], and vise versa.
-		std::vector<int> ticks_x;
-		std::vector<int> ticks_y;
+		// same length. The value at graph_x[i] corresponds 
+		// to the value at graph_y[i], and vise versa.
+		std::vector<float> graph_x;
+		std::vector<float> graph_y;
 		
 		GUI_Pane *outer_pane;
 };

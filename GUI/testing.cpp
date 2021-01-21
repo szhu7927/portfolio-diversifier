@@ -22,21 +22,21 @@ int main(int argc, char **argv)
 								 "tom_vii_font.png", FONTCHARS, 
 								 FONT_WIDTH, FONT_HEIGHT, FONTSIZE_W, FONTSIZE_H);
 	
-	gui->add_button("picbuttn", "Print in console",100, 100,0xBEEF12FF, rando_print);
+//	gui->add_button("picbuttn", "Print in console",100, 100,0xBEEF12FF, rando_print);
 
 	
-	std::vector<int> testx;
+	std::vector<float> testx;
 	testx.push_back(1);
 	testx.push_back(2);
 	testx.push_back(3);
 	testx.push_back(4);
-	std::vector<int> testy;
+	std::vector<float> testy;
 	testy.push_back(5);
 	testy.push_back(2);
 	testy.push_back(9);
 	testy.push_back(2);
 	
-	//GUI_Graph *g = gui->add_graph(20, 20, 450, 450, testx, testy, 0x1234EEFF);
+	GUI_Graph *g = gui->add_graph("graph", 20, 20, 450, 450, testx, testy, 0x1234EEFF);
 	//GUI_Graph *g2 = gui->add_graph(20, 230, 200, 200, testx, testy, 0x1234EEFF);
 	//GUI_Graph *g3 = gui->add_graph(230, 20, 200, 200, testx, testy, 0x1234EEFF);
 	//GUI_Graph *g4 = gui->add_graph(230, 230, 200, 200, testx, testy, 0x1234EEFF);
