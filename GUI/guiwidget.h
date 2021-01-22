@@ -61,6 +61,8 @@ struct GUI_Graph : public GUI_Widget
 	bool update(SDL_Event event);
 	void draw(SDL_Renderer *rend);
 
+	// Makes X, Y axes of this graph "the same" as graph [src]
+	void copy_axes(GUI_Graph *src);
 
 	// All public fields are so by design, and should be 
 	// manually set if necessary.

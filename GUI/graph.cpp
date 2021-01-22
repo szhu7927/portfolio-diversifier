@@ -162,3 +162,14 @@ void GUI_Graph::draw(SDL_Renderer *rend)
 							  DOT_THICKNESS, DOT_THICKNESS, foreground_color);
 	}
 }
+
+
+void GUI_Graph::copy_axes(GUI_Graph *src)
+{
+	width = src->width;
+	height = src->height;
+	gr_x_min = src->gr_x_min;
+	gr_x_max = src->gr_x_max;
+	gr_y_min = src->gr_y_min;
+	gr_y_max = src->gr_y_max;
+}
