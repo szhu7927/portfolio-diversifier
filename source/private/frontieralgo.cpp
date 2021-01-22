@@ -10,14 +10,19 @@
  #include "../public/frontieralgo.h"
 #endif
 
-std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist) {
+std::vector<CombNormal> standard_algo(std::vector<CombNormal> rawlist) {
 	//Starts off with one point
 	std::vector<CombNormal> processed = { rawlist[0] };
+
+	int count = 0;
 
 	for (int index = 1; index < rawlist.size(); ++index) {
 
 		//Gathering the point to be processed
 		CombNormal new_point = rawlist[index];
+		std::cout << "\nPOINT: ";
+		new_point.xyprint();
+		std::cout << std::endl;
 
 		/*
 		Two cases: (1) new_point has a higher risk than any other proccessed point, (2) new_point has a lower risk
@@ -37,6 +42,9 @@ std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist) {
 				processed.push_back(new_point);
 			}
 
+			count++;
+			std::cout << "COUNT: " << count << ", INSERTINDEX: " << processed.size() - 1 << std::endl;
+
 			//No need to look at this point further; it is already processed or not processed.
 			continue;
 		}
@@ -48,10 +56,11 @@ std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist) {
 		First, we find out where new_point's risk value is relative to others.
 		This is done by finding the first processed point that has a greater risk than it.
 		*/
+
 		int insertindex = 0;
-		for (int i = 0; i < processed.size(); ++i) {
-			if (new_point.stdev > processed[i].stdev) {
-				insertindex = i + 1;
+		for (int i = 0; i < processed.size() - 1; ++i) {
+			if (new_point.stdev < processed[i].stdev) {
+				insertindex = i;
 				break;
 			}
 		}
@@ -64,18 +73,18 @@ std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist) {
 
 		//Third, we delete any/all processed points that has greater risk but less return.
 		//This breaks once the processed point's return is above that of new_point, as each subsequent point's return must be greater.
-		for (int j = insertindex; j < processed.size(); ++j) {
-			if (new_point.mean > processed[j].mean) {
-				processed.erase(processed.begin() + j);
-				j--;
-			}
-			else if (new_point.mean < processed[j].mean) {
-				break;
-			}
+		while (processed.size() > insertindex && new_point.mean > processed[insertindex].mean) {
+			std::cout << "ERASING: ";
+			processed[insertindex].xyprint();
+			std::cout << std::endl;
+			processed.erase(processed.begin() + insertindex);
 		}
 
 		//Fourth and finally, we insert new_point into the processed list at index insertindex.
 		processed.insert(processed.begin() + insertindex, new_point);
+
+		count++;
+		std::cout << "COUNT: " << count << ", INSERTINDEX: " << insertindex << std::endl;
 	}
 
 	return processed;
@@ -248,13 +257,13 @@ std::vector<CombNormal> find_optimal_points(DataFrame df, std::vector<std::strin
 	std::vector<CombNormal> rawpointlist = raw_point_generator(df, input_etf_list, inc);
 
 	//Algorithm select.
-	//1 = sarah's algorithm. 2 = no processing at all
+	//1 = standard algorithm. 2 = no processing at all
 	//We may add algorithms and switch between them depending on the amount of points there are. 3 is for debugging.
 	int algoselect = 1;
 	std::vector<CombNormal> processedpoints;
 	switch (algoselect) {
 	case 1:
-		processedpoints = sarahs_algo(rawpointlist);
+		processedpoints = standard_algo(rawpointlist);
 		break;
 	case 2:
 		processedpoints = rawpointlist;
@@ -285,7 +294,7 @@ void fa_debug()
 	std::cout << std::endl;
 
 	//runs algo
-	std::vector<CombNormal> testcase1_result = sarahs_algo(testcase1);
+	std::vector<CombNormal> testcase1_result = standard_algo(testcase1);
 
 	//prints the processed points
 	std::cout << "\nPROCESSED LIST: " << std::endl;
