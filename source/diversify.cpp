@@ -1,13 +1,4 @@
-#ifdef _WIN32
- #include ".\public\storedata.h"
- #include ".\public\frontieralgo.h"
- #include ".\public\risktopointalgo.h"
-#else
- #include "./public/storedata.h"
- #include "./public/frontieralgo.h"
- #include "./public/risktopointalgo.h"
-#endif
-
+#include "diversify.h"
 
 void areatest() {
     std::vector<std::pair<double, double> > vec;
@@ -38,7 +29,8 @@ void areatest() {
     std::cout << "For risk " << risk << ", the best point is (" << point.first << ", " << point.second << ") \n";
 }
 
-int main()
+//Change back to main to test
+int fakemain()
 {
     //testing the algorithm
     //fa_debug();
@@ -57,4 +49,16 @@ int main()
     //areatest();
     system("pause");
     return 0;
+}
+
+std::vector<CombNormal> rawpoints(std::vector<std::string> input_etf_list, double increment) {
+    DataFrame AlphaFrame = read_csv();
+    
+    return raw_point_generator(AlphaFrame, input_etf_list, increment);
+}
+
+std::vector<CombNormal> bestpoints(std::vector<std::string> input_etf_list, double increment) {
+    DataFrame AlphaFrame = read_csv();
+
+    return find_optimal_points(AlphaFrame, input_etf_list, increment);
 }
