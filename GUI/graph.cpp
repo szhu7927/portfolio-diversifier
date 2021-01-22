@@ -100,11 +100,14 @@ void GUI_Graph::draw(SDL_Renderer *rend)
 	const int graph_h = height - (2 * G_EDGE_SPACE);
 	const int num_x_ticks = graph_w / PIXELS_PER_TICKMARK;
 	const int num_y_ticks = graph_h / PIXELS_PER_TICKMARK;
-	const int num_points_x = gr_x_max - gr_x_min;
-	const int num_points_y = gr_y_max - gr_y_min;
-	const double pixels_per_point_x = (double)graph_w / (double)num_points_x;
-	// TODO: should we do this??? Feels off somehow, but idk what else I'd do
-	const double pixels_per_point_y = graph_h / num_points_y;
+	const double point_diff_x = gr_x_max - gr_x_min;
+	const double point_diff_y = gr_y_max - gr_y_min;
+
+	// To warn in case of divide by zero
+	if (point_diff_x == 0 || point_diff_y == 0)
+		std::cout << "Your X or Y point differential seems to be zero!\n";
+	const double pixels_per_point_x = graph_w / point_diff_x;
+	const double pixels_per_point_y = graph_h / point_diff_y;
 
 	const int graph_top_x    = x + G_EDGE_SPACE;
 	const int graph_top_y    = y + G_EDGE_SPACE;
