@@ -25,6 +25,14 @@
 #define DEFAULT_BGCOLOR 0xFFFFFFFF // White
 #define BORDER_COLOR 0x000000FF // Black
 
+
+void print_vec(std::vector<float> v){
+	std::cout << "{ ";
+	for (int i = 0; i < v.size(); i++)
+		std::cout << v[i] << ", ";
+	std::cout << "}\n";
+}
+
 GUI_Graph::GUI_Graph(int loc_x, int loc_y, int dim_w, int dim_h, 
 			     	 std::vector<float> x_vec, std::vector<float> y_vec, 
 					 ulong fg_color, GUI_Pane *pane)
@@ -33,12 +41,12 @@ GUI_Graph::GUI_Graph(int loc_x, int loc_y, int dim_w, int dim_h,
 	y = loc_y;
 	width = dim_w;
 	height = dim_h;
+	funcs_to_graph.push_back(new GraphFunc(x_vec, y_vec, fg_color));
+	background_color = DEFAULT_BGCOLOR;
+
+	std::vector<float> graph_x, graph_y;
 	graph_x.assign(x_vec.begin(), x_vec.end());
 	graph_y.assign(y_vec.begin(), y_vec.end());
-	background_color = DEFAULT_BGCOLOR;
-	foreground_color = fg_color;
-
-	assert (graph_x.size() == graph_y.size());
 
 	gr_y_min = gr_x_min = INT_MAX;
 	gr_y_max = gr_x_max = INT_MIN;
@@ -67,6 +75,10 @@ GUI_Graph::GUI_Graph(int loc_x, int loc_y, int dim_w, int dim_h,
 GUI_Graph::~GUI_Graph()
 {
 	delete inner_font;
+	for (int i = 0; i < funcs_to_graph.size(); i++)
+	{
+		delete funcs_to_graph[i];
+	}
 }
 
 
@@ -80,6 +92,24 @@ bool GUI_Graph::update(SDL_Event event)
 std::string float_to_string_round(float f, int decimal_round)
 {
 	return std::to_string(f).substr(0, 2 + decimal_round);
+}
+
+void draw_dots(GUI_Pane *outer_pane, std::vector<float> graph_x,
+			   std::vector<float> graph_y, ulong color, 
+			   int gr_x_min, int gr_y_min, 
+			   int ppp_x, int ppp_y,
+			   int graph_top_x, int graph_bottom_y)
+{
+	for (int i = 0; i < graph_x.size(); i++)
+	{
+		int pixel_x = graph_top_x  + 
+								((graph_x[i] - gr_x_min) * ppp_x);
+		int pixel_y = graph_bottom_y - 
+							    ((graph_y[i] - gr_y_min) * ppp_y);
+		outer_pane->fill_rect(pixel_x - DOT_THICKNESS/2, 
+							  pixel_y - DOT_THICKNESS/2,
+							  DOT_THICKNESS, DOT_THICKNESS, color);
+	}
 }
 
 void GUI_Graph::draw(SDL_Renderer *rend)
@@ -151,15 +181,12 @@ void GUI_Graph::draw(SDL_Renderer *rend)
 	}
 	
 	// Draw dots
-	for (int i = 0; i < graph_x.size(); i++)
+	for (int i = 0; i < funcs_to_graph.size(); i++)
 	{
-		int pixel_x = graph_top_x  + 
-								((graph_x[i] - gr_x_min) * pixels_per_point_x);
-		int pixel_y = graph_bottom_y - 
-							    ((graph_y[i] - gr_y_min) * pixels_per_point_y);
-		outer_pane->fill_rect(pixel_x - DOT_THICKNESS/2, 
-							  pixel_y - DOT_THICKNESS/2,
-							  DOT_THICKNESS, DOT_THICKNESS, foreground_color);
+		draw_dots(outer_pane, funcs_to_graph[i]->x_points,
+				 funcs_to_graph[i]->y_points, funcs_to_graph[i]->color,
+				 gr_x_min, gr_y_min, pixels_per_point_x, 
+				 pixels_per_point_y, graph_top_x, graph_bottom_y );
 	}
 }
 
@@ -172,4 +199,10 @@ void GUI_Graph::copy_axes(GUI_Graph *src)
 	gr_x_max = src->gr_x_max;
 	gr_y_min = src->gr_y_min;
 	gr_y_max = src->gr_y_max;
+}
+
+void GUI_Graph::add_graph_func(std::vector<float> xvec, std::vector<float> yvec,
+								ulong clr)
+{
+	funcs_to_graph.push_back(new GraphFunc(xvec, yvec, clr));
 }

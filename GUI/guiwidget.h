@@ -1,6 +1,7 @@
 #include "font.h"
 #include <vector>
 #include <string>
+#include <cassert>
 // In guipane.h
 struct GUI_Pane;
 
@@ -49,9 +50,36 @@ struct GUI_Button : public GUI_Widget
 		bool pressed_this_frame;
 };
 
+/* Instance represents one "function" in a GUI_Graph that can be graphed
+ * with others on the same set of axes on the same graph pane */
+struct GraphFunc
+{
+	GraphFunc(std::vector<float> x_vec, std::vector<float> y_vec, ulong clr)
+	{
+		assert(x_vec.size() == y_vec.size());
+		x_points.assign(x_vec.begin(), x_vec.end());
+		y_points.assign(y_vec.begin(), y_vec.end());
+		color = clr;
+	}
+	
+	~GraphFunc() {};
+
+	// Invariant: these two vectors should have the 
+	// same length. The value at x_points[i] corresponds 
+	// to the value at y_points[i], and vise versa.
+	std::vector<float> x_points;
+	std::vector<float> y_points;
+
+	// Color of this function's dots
+	ulong color; 
+};
+
 
 struct GUI_Graph : public GUI_Widget
 {
+	/* Constructs an instance of a GUI_Graph containing one 
+	 * function for graphing with the given parameters. Other
+	 * functions to graph can be added afterwards. */
 	GUI_Graph(int loc_x, int loc_y, int dim_w, int dim_h, 
 			   std::vector<float> x_vec, std::vector<float> y_vec, 
 			   ulong fg_color, GUI_Pane *pane);
@@ -63,6 +91,9 @@ struct GUI_Graph : public GUI_Widget
 
 	// Makes X, Y axes of this graph "the same" as graph [src]
 	void copy_axes(GUI_Graph *src);
+
+	void add_graph_func(std::vector<float> xvec, std::vector<float> yvec, 
+						ulong clr);
 
 	// All public fields are so by design, and should be 
 	// manually set if necessary.
@@ -77,19 +108,14 @@ struct GUI_Graph : public GUI_Widget
 	float gr_x_max, gr_y_max;
 
 	ulong background_color;
-	// Foreground := Like, the color of the dots and stuff
-	ulong foreground_color; 
 
 	private:
 		// Should be less "thick" font than that of 
 		// background GUI Pane.
 		Font *inner_font;
 
-		// Invariant: these two vectors should have the 
-		// same length. The value at graph_x[i] corresponds 
-		// to the value at graph_y[i], and vise versa.
-		std::vector<float> graph_x;
-		std::vector<float> graph_y;
+
+		std::vector<GraphFunc*> funcs_to_graph;
 		
 		GUI_Pane *outer_pane;
 };
