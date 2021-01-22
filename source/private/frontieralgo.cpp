@@ -82,6 +82,7 @@ std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist) {
 }
 
 std::vector<std::vector<double>> weight_generator(double inc, int length) {
+	//Brute force, it doesn't look good but it's what works best right now
 	std::vector<std::vector<double>> builder;
 	switch (length) {
 	case 2:
@@ -101,6 +102,102 @@ std::vector<std::vector<double>> weight_generator(double inc, int length) {
 			for (double j = 0; j <= 1 - i; j += inc) {
 				for (double k = 0; k <= 1 - i - j; k += inc) {
 					builder.push_back({ i, j, k, 1-i-j-k });
+				}
+			}
+		}
+		break;
+	case 5:
+		for (double i = 0; i <= 1; i += inc) {
+			for (double j = 0; j <= 1 - i; j += inc) {
+				for (double k = 0; k <= 1 - i - j; k += inc) {
+					for (double l = 0; l <= 1 - i - j - k; k += inc) {
+						builder.push_back({ i, j, k, l, 1-i-j-k-l});
+					}
+				}
+			}
+		}
+		break;
+	case 6:
+		for (double i = 0; i <= 1; i += inc) {
+			for (double j = 0; j <= 1 - i; j += inc) {
+				for (double k = 0; k <= 1 - i - j; k += inc) {
+					for (double l = 0; l <= 1 - i - j - k; k += inc) {
+						for (double m = 0; m <= 1 - i - j - k - l; m += inc) {
+							builder.push_back({ i, j, k, l, m, 1 - i - j - k - l - m});
+						}
+					}
+				}
+			}
+		}
+		break;
+	case 7:
+		for (double i = 0; i <= 1; i += inc) {
+			for (double j = 0; j <= 1 - i; j += inc) {
+				for (double k = 0; k <= 1 - i - j; k += inc) {
+					for (double l = 0; l <= 1 - i - j - k; k += inc) {
+						for (double m = 0; m <= 1 - i - j - k - l; m += inc) {
+							for (double n = 0; n <= 1 - i - j - k - l - m; n += inc) {
+								builder.push_back({ i, j, k, l, m, n, 1 - i - j - k - l - m - n });
+							}
+						}
+					}
+				}
+			}
+		}
+		break;
+	case 8:
+		for (double i = 0; i <= 1; i += inc) {
+			for (double j = 0; j <= 1 - i; j += inc) {
+				for (double k = 0; k <= 1 - i - j; k += inc) {
+					for (double l = 0; l <= 1 - i - j - k; k += inc) {
+						for (double m = 0; m <= 1 - i - j - k - l; m += inc) {
+							for (double n = 0; n <= 1 - i - j - k - l - m; n += inc) {
+								for (double o = 0; o <= 1 - i - j - k - l - m - n; o += inc) {
+									builder.push_back({ i, j, k, l, m, n, o, 1 - i - j - k - l - m - n - o });
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		break;
+	case 9:
+		for (double i = 0; i <= 1; i += inc) {
+			for (double j = 0; j <= 1 - i; j += inc) {
+				for (double k = 0; k <= 1 - i - j; k += inc) {
+					for (double l = 0; l <= 1 - i - j - k; k += inc) {
+						for (double m = 0; m <= 1 - i - j - k - l; m += inc) {
+							for (double n = 0; n <= 1 - i - j - k - l - m; n += inc) {
+								for (double o = 0; o <= 1 - i - j - k - l - m - n; o += inc) {
+									for (double p = 0; p <= 1 - i - j - k - l - m - n - o; p += inc) {
+										builder.push_back({ i, j, k, l, m, n, o, p, 1 - i - j - k - l - m - n - o - p});
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		break;
+	case 10:
+		for (double i = 0; i <= 1; i += inc) {
+			for (double j = 0; j <= 1 - i; j += inc) {
+				for (double k = 0; k <= 1 - i - j; k += inc) {
+					for (double l = 0; l <= 1 - i - j - k; k += inc) {
+						for (double m = 0; m <= 1 - i - j - k - l; m += inc) {
+							for (double n = 0; n <= 1 - i - j - k - l - m; n += inc) {
+								for (double o = 0; o <= 1 - i - j - k - l - m - n; o += inc) {
+									for (double p = 0; p <= 1 - i - j - k - l - m - n - o; p += inc) {
+										for (double q = 0; p <= 1 - i - j - k - l - m - n - o - p; q += inc) {
+											builder.push_back({ i, j, k, l, m, n, o, p, q, 1 - i - j - k - l - m - n - o - p - q });
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}

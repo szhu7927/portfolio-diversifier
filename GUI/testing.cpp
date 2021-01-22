@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 	testy.push_back(2);
 	*/
 	
-	std::vector<std::string> input_etf_list = { "SPY", "VTV" };
+	std::vector<std::string> input_etf_list = { "SPY", "IWF", "VTV", "SCHD", "USMV", "VEA", "VWO", "AGG", "LQD" };
 	double increment = .1;
 
 	std::vector<CombNormal> rpoints = rawpoints(input_etf_list, increment);
