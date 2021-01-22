@@ -8,7 +8,7 @@ std::vector<double> percgrowth(std::vector<double> vec)
 {
 	std::vector<double> growthvec;
 	for (unsigned int i = 0; i < vec.size() - 1; i++) {
-		growthvec.push_back((vec[i + 1] - vec[i]) / vec[i]);
+		growthvec.push_back((vec[i + 1] - vec[i]) / vec[i] * 100);
 	}
 	return growthvec;
 }

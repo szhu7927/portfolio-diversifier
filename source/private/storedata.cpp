@@ -17,7 +17,10 @@ DataFrame read_csv()
 	std::ifstream ip(CSV_FILE);
 
     //If file fails to open, throw error
-    if (!ip.is_open()) exit(EXIT_FAILURE);
+    if (!ip.is_open()) {
+        std::cout << "ERROR: Failed to open CSV file \n";
+        exit(EXIT_FAILURE);
+    }
 
     //This is very poorly written right now
     //ETF tracks the name, single_price tracks the prices for a single ETF
