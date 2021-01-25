@@ -9,7 +9,7 @@
 #include "date.h"
 #include "frontieralgo.h"
 
-std::vector<CombNormal> sarahs_algo(std::vector<CombNormal> rawlist);
+std::vector<CombNormal> standard_algo(std::vector<CombNormal> rawlist);
 
 std::vector<std::vector<double>> weight_generator(double inc, int length);
 
