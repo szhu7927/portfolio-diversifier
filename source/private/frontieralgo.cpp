@@ -20,9 +20,9 @@ std::vector<CombNormal> standard_algo(std::vector<CombNormal> rawlist) {
 
 		//Gathering the point to be processed
 		CombNormal new_point = rawlist[index];
-		std::cout << "\nPOINT: ";
-		new_point.xyprint();
-		std::cout << std::endl;
+		//std::cout << "\nPOINT: ";
+		//new_point.xyprint();
+		//std::cout << std::endl;
 
 		/*
 		Two cases: (1) new_point has a higher risk than any other proccessed point, (2) new_point has a lower risk
@@ -43,7 +43,7 @@ std::vector<CombNormal> standard_algo(std::vector<CombNormal> rawlist) {
 			}
 
 			count++;
-			std::cout << "COUNT: " << count << ", INSERTINDEX: " << processed.size() - 1 << std::endl;
+			//std::cout << "COUNT: " << count << ", INSERTINDEX: " << processed.size() - 1 << std::endl;
 
 			//No need to look at this point further; it is already processed or not processed.
 			continue;
@@ -74,9 +74,9 @@ std::vector<CombNormal> standard_algo(std::vector<CombNormal> rawlist) {
 		//Third, we delete any/all processed points that has greater risk but less return.
 		//This breaks once the processed point's return is above that of new_point, as each subsequent point's return must be greater.
 		while (processed.size() > insertindex && new_point.mean > processed[insertindex].mean) {
-			std::cout << "ERASING: ";
-			processed[insertindex].xyprint();
-			std::cout << std::endl;
+			//std::cout << "ERASING: ";
+			//processed[insertindex].xyprint();
+			//std::cout << std::endl;
 			processed.erase(processed.begin() + insertindex);
 		}
 
@@ -84,7 +84,7 @@ std::vector<CombNormal> standard_algo(std::vector<CombNormal> rawlist) {
 		processed.insert(processed.begin() + insertindex, new_point);
 
 		count++;
-		std::cout << "COUNT: " << count << ", INSERTINDEX: " << insertindex << std::endl;
+		//std::cout << "COUNT: " << count << ", INSERTINDEX: " << insertindex << std::endl;
 	}
 
 	return processed;
