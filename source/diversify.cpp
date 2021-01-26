@@ -62,3 +62,23 @@ std::vector<CombNormal> bestpoints(std::vector<std::string> input_etf_list, doub
 
     return find_optimal_points(AlphaFrame, input_etf_list, increment);
 }
+
+CombNormal allocation(std::vector<CombNormal> frontier, double risk) {
+    //Convert CombNormal to a format that risktopointalgo accepts
+    std::vector<std::pair<double, double>> frontierpoints;
+
+    for (CombNormal normal : frontier) {
+        frontierpoints.push_back(std::make_pair(normal.stdev, normal.mean));
+    }
+
+    std::vector<std::pair<std::pair<double, double>, double> > areadata = cumareavector(frontierpoints);
+    std::pair<double, double> coordinates = bestpoint(areadata, risk);
+
+    //Find corresponding CombNormal
+    for (CombNormal normal : frontier) {
+        if (normal.stdev == coordinates.first && normal.mean == coordinates.second) return normal;
+    }
+
+    //Error if the function reaches this point
+    return CombNormal(0, 0);
+}

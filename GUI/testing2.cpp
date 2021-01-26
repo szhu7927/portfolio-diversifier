@@ -23,10 +23,9 @@ int main(int argc, char **argv)
 								 "tom_vii_font.png", FONTCHARS, 
 								 FONT_WIDTH, FONT_HEIGHT, FONTSIZE_W, FONTSIZE_H);
 
-	//Old test points
-
-	std::vector<std::string> input_etf_list = { "IWF", "SPY" };
+	std::vector<std::string> input_etf_list = { "SPY", "VTV", "IWF" };
 	double increment = .1;
+	double risk = 0.5;
 
 	std::vector<CombNormal> rpoints = rawpoints(input_etf_list, increment);
 	std::vector<float> rawx;
@@ -45,17 +44,26 @@ int main(int argc, char **argv)
 		bestx.push_back((float)normal.stdev);
 		besty.push_back((float)normal.mean);
 	}
-	std::cout << "besty ";
+
+	CombNormal chosenpoint = allocation(bpoints, risk);
+	std::vector<float> chosenx;
+	std::vector<float> choseny;
+
+	chosenx.push_back((float)chosenpoint.stdev);
+	choseny.push_back((float)chosenpoint.mean);
+	
+	std::cout << "bestpoints ";
 	for (int i = 0; i < besty.size(); i++)
-		std::cout << besty[i] << " ";
+		std::cout << bestx[i] << ", " << besty[i] << "; ";
 	std::cout << "\n";
-	std::cout << "rawy ";
+	std::cout << "rawpoints ";
 	for (int i = 0; i < rawy.size(); i++)
-		std::cout << rawy[i] << " ";
+		std::cout << rawx[i] << ", " << rawy[i] << "; ";
 	std::cout << "\n";
 
-	GUI_Graph *g = gui->add_graph("graph", 20, 20, 450, 450, rawx, rawy, 0x1234EEFF);
-	g->add_graph_func(bestx, besty, 0xFF0000FF);
+	GUI_Graph *g = gui->add_graph("graph", 20, 20, 450, 450, rawx, rawy, 0x00000000);
+	g->add_graph_func(bestx, besty, 0x1234EEFF);
+	g->add_graph_func(chosenx, choseny, 0xFF0000FF);
 
 	gui->loop();
 

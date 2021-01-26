@@ -15,3 +15,4 @@ int fakemain();
 
 std::vector<CombNormal> rawpoints(std::vector<std::string> input_etf_list, double increment);
 std::vector<CombNormal> bestpoints(std::vector<std::string> input_etf_list, double increment);
+CombNormal allocation(std::vector<CombNormal> frontier, double risk);

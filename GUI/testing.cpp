@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 	testy.push_back(2);
 	*/
 	
-	std::vector<std::string> input_etf_list = { "IWF", "SPY", "VTV" };
+	std::vector<std::string> input_etf_list = { "SPY", "VTV" };
 	double increment = .1;
 
 	std::vector<CombNormal> rpoints = rawpoints(input_etf_list, increment);
@@ -49,10 +49,7 @@ int main(int argc, char **argv)
 	for (CombNormal normal : rpoints) {
 		rawx.push_back((float)normal.stdev);
 		rawy.push_back((float)normal.mean);
-		//std::cout << (float)normal.stdev << ", " << (float)normal.mean << "\n";
 	}
-
-	//std::cout << "RAW SIZE: " << rawx.size() << ", " << rawy.size() << std::endl;
 
 	std::vector<CombNormal> bpoints = bestpoints(input_etf_list, increment);
 	std::vector<float> bestx;
@@ -63,16 +60,17 @@ int main(int argc, char **argv)
 		besty.push_back((float)normal.mean);
 	}
 
-	//std::cout << "BEST SIZE: " << bestx.size() << ", " << besty.size() << std::endl;
+	std::cout << "besty ";
+	for (int i = 0; i < besty.size(); i++)
+		std::cout << bestx[i] << ", " << besty[i] << "; ";
+	std::cout << "\n";
+	std::cout << "rawy ";
+	for (int i = 0; i < rawy.size(); i++)
+		std::cout << rawx[i] << ", " << rawy[i] << "; ";
+	std::cout << "\n";
 
 	GUI_Graph *g = gui->add_graph("graph", 20, 20, 450, 450, rawx, rawy, 0x1234EEFF);
 	GUI_Graph *g2 = gui->add_graph("graph", 480, 20, 450, 450, bestx, besty, 0x1234EEFF);
-
-	//GUI_Graph *g2 = gui->add_graph(20, 230, 200, 200, testx, testy, 0x1234EEFF);
-	//GUI_Graph *g3 = gui->add_graph(230, 20, 200, 200, testx, testy, 0x1234EEFF);
-	//GUI_Graph *g4 = gui->add_graph(230, 230, 200, 200, testx, testy, 0x1234EEFF);
-	//g->tick_x_min = 0;
-	//g->tick_y_min = 0;
 
 	gui->loop();
 
