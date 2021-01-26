@@ -1,2 +1,2 @@
-g++ testing.cpp font.cpp guipane.cpp button.cpp graph.cpp ..\source\diversify.cpp ..\source\private\storedata.cpp ..\source\private\ymath.cpp ..\source\private\dataframe.cpp ..\source\private\date.cpp ..\source\private\frontieralgo.cpp ..\source\private\risktopointalgo.cpp -o GUITEST -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+g++ testing2.cpp font.cpp guipane.cpp button.cpp graph.cpp ..\source\diversify.cpp ..\source\private\storedata.cpp ..\source\private\ymath.cpp ..\source\private\dataframe.cpp ..\source\private\date.cpp ..\source\private\frontieralgo.cpp ..\source\private\risktopointalgo.cpp -o GUITEST -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 pause
