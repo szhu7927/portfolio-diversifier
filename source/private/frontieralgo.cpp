@@ -58,7 +58,7 @@ std::vector<CombNormal> standard_algo(std::vector<CombNormal> rawlist) {
 		*/
 
 		int insertindex = 0;
-		for (int i = 0; i < processed.size() - 1; ++i) {
+		for (int i = 0; i < processed.size(); ++i) {
 			if (new_point.stdev < processed[i].stdev) {
 				insertindex = i;
 				break;

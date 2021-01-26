@@ -23,7 +23,8 @@ int main(int argc, char **argv)
 								 "tom_vii_font.png", FONTCHARS, 
 								 FONT_WIDTH, FONT_HEIGHT, FONTSIZE_W, FONTSIZE_H);
 
-	std::vector<std::string> input_etf_list = { "SPY", "VTV", "IWF" };
+	std::vector<std::string> input_etf_list = { "IWF", "SPY", "VTV", "VWO", "USMV"};
+
 	double increment = .1;
 	double risk = 0.5;
 
