@@ -45,6 +45,14 @@ int main(int argc, char **argv)
 		bestx.push_back((float)normal.stdev);
 		besty.push_back((float)normal.mean);
 	}
+	std::cout << "besty ";
+	for (int i = 0; i < besty.size(); i++)
+		std::cout << besty[i] << " ";
+	std::cout << "\n";
+	std::cout << "rawy ";
+	for (int i = 0; i < rawy.size(); i++)
+		std::cout << rawy[i] << " ";
+	std::cout << "\n";
 
 	GUI_Graph *g = gui->add_graph("graph", 20, 20, 450, 450, rawx, rawy, 0x1234EEFF);
 	g->add_graph_func(bestx, besty, 0xFF0000FF);

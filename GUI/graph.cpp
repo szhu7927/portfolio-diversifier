@@ -61,10 +61,28 @@ GUI_Graph::GUI_Graph(int loc_x, int loc_y, int dim_w, int dim_h,
 		if (graph_y[i] < gr_y_min)
 			gr_y_min = graph_y[i];
 	}
+#if 0
+	std::cout << "GR_YMIN " << gr_y_min << "\n";
+	std::cout << "GR_Ymax " << gr_y_max << "\n";
+	std::cout << "GR_xmin " << gr_x_min << "\n";
+	std::cout << "grxmax " << gr_x_max << "\n";
+	std::cout << "ysize " << graph_y.size() << "\n";
+	std::cout << "xsize " << graph_x.size() << "\n";
+	std::cout << "\n\n";
+	std::cout << "ymax divided by ysize " << gr_y_max / graph_y.size() << "\n";
+	std::cout << "xmax div by xsize " << gr_x_max / graph_x.size() << "\n";
+#endif
 	gr_y_min -= (gr_y_max / graph_y.size());
 	gr_y_max += (gr_y_max / graph_y.size());
 	gr_x_min -= (gr_x_max / graph_x.size());
-	gr_x_max += (gr_x_max / graph_y.size());
+	gr_x_max += (gr_x_max / graph_x.size());
+#if 0
+	std::cout << "\n\n";
+	std::cout << "GR_YMIN " << gr_y_min << "\n";
+	std::cout << "GR_Ymax " << gr_y_max << "\n";
+	std::cout << "GR_xmin " << gr_x_min << "\n";
+	std::cout << "grxmax " << gr_x_max << "\n";
+#endif
 	
 	inner_font = new Font(FONTPIC, FONTCHARS, pane->renderer, 
 						  FONT_WIDTH, FONT_HEIGHT, FONTSIZE_W, FONTSIZE_H);
@@ -91,25 +109,46 @@ bool GUI_Graph::update(SDL_Event event)
  * Rounds [f] to [decimal_round] places, then casts to string. */
 std::string float_to_string_round(float f, int decimal_round)
 {
-	return std::to_string(f).substr(0, 2 + decimal_round);
+	std::string f_str = std::to_string(f);
+	if (f_str.size() < 5)
+		return f_str;
+	return f_str.substr(0, 2 + decimal_round);
 }
 
 void draw_dots(GUI_Pane *outer_pane, std::vector<float> graph_x,
 			   std::vector<float> graph_y, ulong color, 
-			   int gr_x_min, int gr_y_min, 
+			   float gr_x_min, float gr_y_min, 
 			   int ppp_x, int ppp_y,
 			   int graph_top_x, int graph_bottom_y)
 {
+#if 0
+	std::cout << "GR_X_MIN " << gr_x_min << "\n";
+	std::cout << "GR_Y_MIN " << gr_y_min << "\n";
+	std::cout << "GR_TOPX " << graph_top_x << "\n";
+	std::cout << "GR_BOTY " << graph_bottom_y << "\n";
+	std::cout << "PPP_X " << ppp_x << "\n";
+	std::cout << "PPP_Y " << ppp_y << "\n";
+	std::cout << "GRAPHX: ";
+	print_vec(graph_x);
+	std::cout << "GRAPHY: ";
+	print_vec(graph_y);
+	std::cout << "PIXELXY ";
+#endif
 	for (int i = 0; i < graph_x.size(); i++)
 	{
 		int pixel_x = graph_top_x  + 
 								((graph_x[i] - gr_x_min) * ppp_x);
 		int pixel_y = graph_bottom_y - 
 							    ((graph_y[i] - gr_y_min) * ppp_y);
+#if 0
+		std::cout << " " << pixel_x << " " << pixel_y;
+#endif
+
 		outer_pane->fill_rect(pixel_x - DOT_THICKNESS/2, 
 							  pixel_y - DOT_THICKNESS/2,
 							  DOT_THICKNESS, DOT_THICKNESS, color);
 	}
+	std::cout << "\n";
 }
 
 void GUI_Graph::draw(SDL_Renderer *rend)
