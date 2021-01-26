@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
 	//Old test points
 
-	std::vector<std::string> input_etf_list = { "IWF", "SPY" };
+	std::vector<std::string> input_etf_list = { "IWF", "SPY", "VTV", "VWO", "USMV"};
 	double increment = .1;
 
 	std::vector<CombNormal> rpoints = rawpoints(input_etf_list, increment);
