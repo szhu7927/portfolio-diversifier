@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 								 "tom_vii_font.png", FONTCHARS, 
 								 FONT_WIDTH, FONT_HEIGHT, FONTSIZE_W, FONTSIZE_H);
 
-	std::vector<std::string> input_etf_list = { "IWF", "SPY", "VTV", "VWO", "USMV"};
+	std::vector<std::string> input_etf_list = { "IWF", "SPY", "VTV", "VWO" };
 
 	double increment = .1;
 	double risk = 0.5;
@@ -53,14 +53,9 @@ int main(int argc, char **argv)
 	chosenx.push_back((float)chosenpoint.stdev);
 	choseny.push_back((float)chosenpoint.mean);
 	
-	std::cout << "bestpoints ";
-	for (int i = 0; i < besty.size(); i++)
-		std::cout << bestx[i] << ", " << besty[i] << "; ";
-	std::cout << "\n";
-	std::cout << "rawpoints ";
-	for (int i = 0; i < rawy.size(); i++)
-		std::cout << rawx[i] << ", " << rawy[i] << "; ";
-	std::cout << "\n";
+	for (std::pair<std::string, double> weight : chosenpoint.ETF_weights) {
+		if (!weight.first.empty()) std::cout << "STOCK: " << weight.first << ", WEIGHT: " << weight.second << "\n";
+	}
 
 	GUI_Graph *g = gui->add_graph("graph", 20, 20, 450, 450, rawx, rawy, 0x00000000);
 	g->add_graph_func(bestx, besty, 0x1234EEFF);

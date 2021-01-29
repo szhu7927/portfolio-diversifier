@@ -148,7 +148,7 @@ void draw_dots(GUI_Pane *outer_pane, std::vector<float> graph_x,
 							  pixel_y - DOT_THICKNESS/2,
 							  DOT_THICKNESS, DOT_THICKNESS, color);
 	}
-	std::cout << "\n";
+	// std::cout << "\n";
 }
 
 void GUI_Graph::draw(SDL_Renderer *rend)
