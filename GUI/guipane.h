@@ -46,6 +46,9 @@ struct GUI_Pane {
 				    int x, int y, int w, int h,
 					std::vector<float> x_vec, std::vector<float> y_vec,
 					ulong fg_color);
+	// Same with this one
+	GUI_Select* add_selectable(const std::string& label, int x, int y, ulong color);
+
 							
 
 

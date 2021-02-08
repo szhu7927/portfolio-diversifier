@@ -121,3 +121,37 @@ struct GUI_Graph : public GUI_Widget
 };
 
 
+struct GUI_Select : public GUI_Widget
+{
+	/* Constructs a GUI_Select widget with empty
+	 * lists. Things are added to selectable list (vector)
+	 * using methods only */
+	GUI_Select(GUI_Pane *outer, int x_cor, int y_cor, ulong color);
+	
+	~GUI_Select();
+
+	bool update(SDL_Event event);
+	void draw(SDL_Renderer *rend);
+
+	void add_option(const std::string &option);
+	void add_options(std::vector<std::string> str_vec);
+
+	ulong unselected_color;
+	ulong selected_color;
+	int x, y;
+
+	private:
+		/* Invariant: a given index represents
+		 * the same name, toggle, etc. for each of 
+		 * these vectors. They should also all have
+		 * length [length]. */
+		std::vector<std::string> names;
+		std::vector<bool> toggles;
+		int length;
+
+		/* Length of longest string in [names], used
+		 * to determine length for drawing selectable */
+		int longest_name_length;
+
+		GUI_Pane* outer_pane;
+};

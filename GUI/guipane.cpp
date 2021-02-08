@@ -160,6 +160,14 @@ GUI_Graph* GUI_Pane::add_graph(const std::string& label,
 	return g;
 }
 
+GUI_Select* GUI_Pane::add_selectable(const std::string& label, int x, int y, 
+																		 ulong color)
+{
+	GUI_Select *s = new GUI_Select(this, x, y, color);
+	widget_labels.push_back(label);
+	widgets.push_back(s);
+	return s;
+}
 
 GUI_Widget* GUI_Pane::find_widget_by_label(const std::string& label)
 {

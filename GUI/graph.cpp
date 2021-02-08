@@ -8,8 +8,8 @@
 // TODO: remains as tom7 font, should change?
 #define FONTPIC "tom_vii_font.png"
 #define FONTCHARS " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`-=[]\\;',./~!@#$%^&*()_+{}|:\"<>?"
-#define FONTSIZE_H 12
-#define FONTSIZE_W 10
+#define FONTSIZE_H 17
+#define FONTSIZE_W 11
 #define FONT_HEIGHT 17
 #define FONT_WIDTH 11
 #define LETR_SPC 7
